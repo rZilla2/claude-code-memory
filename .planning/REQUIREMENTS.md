@@ -116,8 +116,8 @@
 | SRCH-03 | Phase 3 | Pending |
 | SRCH-04 | Phase 3 | Pending |
 | SRCH-05 | Phase 3 | Pending |
-| SRCH-06 | Phase 3 | Pending |
-| SRCH-07 | Phase 3 | Pending |
+| SRCH-06 | Phase 6 | Pending |
+| SRCH-07 | Phase 6 | Pending |
 | MCP-01 | Phase 4 | Pending |
 | MCP-02 | Phase 4 | Pending |
 | MCP-03 | Phase 4 | Pending |
@@ -129,7 +129,7 @@
 | CLI-05 | Phase 4 | Pending |
 | EMB-01 | Phase 1 | Pending |
 | EMB-02 | Phase 1 | Pending |
-| EMB-03 | Phase 5 | Pending |
+| EMB-03 | Phase 6 | Pending |
 | EMB-04 | Phase 1 | Pending |
 | WATCH-01 | Phase 5 | Pending |
 | WATCH-02 | Phase 5 | Pending |
@@ -146,4 +146,4 @@
 
 ---
 *Requirements defined: 2026-04-05*
-*Last updated: 2026-04-05 after initial definition*
+*Last updated: 2026-04-05 after roadmap creation (SRCH-06, SRCH-07, EMB-03 moved to Phase 6)*
