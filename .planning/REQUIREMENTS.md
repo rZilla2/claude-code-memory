@@ -17,8 +17,8 @@
 - [x] **IDX-01**: Scanner discovers all .md files in configured vault directory recursively
 - [x] **IDX-02**: Markdown-aware chunking splits files by heading (H1/H2/H3) using remark AST parser, preserving heading path context
 - [x] **IDX-03**: Each chunk stores metadata: source file path, heading path, chunk hash, last-indexed timestamp, file modified date
-- [ ] **IDX-04**: Content hashing (xxhash) skips re-embedding unchanged chunks on reindex
-- [ ] **IDX-05**: Bulk indexing respects embedding API rate limits via queue with concurrency control
+- [x] **IDX-04**: Content hashing (xxhash) skips re-embedding unchanged chunks on reindex
+- [x] **IDX-05**: Bulk indexing respects embedding API rate limits via queue with concurrency control
 - [ ] **IDX-06**: CLI command `mem index` triggers full vault reindex
 - [ ] **IDX-07**: CLI command `mem status` shows index stats (files indexed, chunks, last indexed, stale count)
 
@@ -107,8 +107,8 @@
 | IDX-01 | Phase 2 | Complete |
 | IDX-02 | Phase 2 | Complete |
 | IDX-03 | Phase 2 | Complete |
-| IDX-04 | Phase 2 | Pending |
-| IDX-05 | Phase 2 | Pending |
+| IDX-04 | Phase 2 | Complete |
+| IDX-05 | Phase 2 | Complete |
 | IDX-06 | Phase 2 | Pending |
 | IDX-07 | Phase 2 | Pending |
 | SRCH-01 | Phase 3 | Pending |

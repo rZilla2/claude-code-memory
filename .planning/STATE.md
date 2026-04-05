@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-index-pipeline-02-01-PLAN.md
-last_updated: "2026-04-05T18:36:55.569Z"
+stopped_at: Completed 02-index-pipeline-02-03-PLAN.md
+last_updated: "2026-04-05T18:40:05.401Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -51,6 +51,7 @@ Plan: 1 of 4
 | Phase 01-foundation P03 | 18 | 2 tasks | 5 files |
 | Phase 02-index-pipeline P02 | 2 | 1 tasks | 2 files |
 | Phase 02-index-pipeline P01 | 2 | 2 tasks | 8 files |
+| Phase 02-index-pipeline P03 | 12 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,7 @@ Recent decisions affecting current work:
 - [Phase 02-index-pipeline]: SHA-256 (built-in crypto) used for chunk hashing over xxhash — avoids native dep for vault-scale workloads
 - [Phase 02-index-pipeline]: Token estimate heuristic: charCount/4 for paragraph-split threshold — avoids tiktoken dep
 - [Phase 02-index-pipeline]: fast-glob for Node 18 compatibility; ignorePaths mapped to **/{path}/** glob patterns
+- [Phase 02-index-pipeline]: Retry logic: one retry per file before marking failed; hash gate uses SHA-256 of file content; deleteChunksByPath before table.add prevents stale contradictions
 
 ### Pending Todos
 
@@ -85,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T18:36:55.567Z
-Stopped at: Completed 02-index-pipeline-02-01-PLAN.md
+Last session: 2026-04-05T18:40:05.400Z
+Stopped at: Completed 02-index-pipeline-02-03-PLAN.md
 Resume file: None
