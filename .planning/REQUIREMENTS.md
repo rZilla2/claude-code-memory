@@ -19,8 +19,8 @@
 - [x] **IDX-03**: Each chunk stores metadata: source file path, heading path, chunk hash, last-indexed timestamp, file modified date
 - [x] **IDX-04**: Content hashing (xxhash) skips re-embedding unchanged chunks on reindex
 - [x] **IDX-05**: Bulk indexing respects embedding API rate limits via queue with concurrency control
-- [ ] **IDX-06**: CLI command `mem index` triggers full vault reindex
-- [ ] **IDX-07**: CLI command `mem status` shows index stats (files indexed, chunks, last indexed, stale count)
+- [x] **IDX-06**: CLI command `mem index` triggers full vault reindex
+- [x] **IDX-07**: CLI command `mem status` shows index stats (files indexed, chunks, last indexed, stale count)
 
 ### Search
 
@@ -109,8 +109,8 @@
 | IDX-03 | Phase 2 | Complete |
 | IDX-04 | Phase 2 | Complete |
 | IDX-05 | Phase 2 | Complete |
-| IDX-06 | Phase 2 | Pending |
-| IDX-07 | Phase 2 | Pending |
+| IDX-06 | Phase 2 | Complete |
+| IDX-07 | Phase 2 | Complete |
 | SRCH-01 | Phase 3 | Pending |
 | SRCH-02 | Phase 3 | Pending |
 | SRCH-03 | Phase 3 | Pending |
