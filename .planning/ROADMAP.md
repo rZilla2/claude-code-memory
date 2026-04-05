@@ -10,7 +10,7 @@
 
 - [x] **Phase 1: Foundation** - Config, DB clients, embedding interface, path safety (completed 2026-04-05)
 - [x] **Phase 2: Index Pipeline** - Scanner, AST chunker, bulk indexer with hash-gating (completed 2026-04-05)
-- [ ] **Phase 3: Query Pipeline** - Hybrid search (vector + BM25), RRF merge, metadata filtering
+- [x] **Phase 3: Query Pipeline** - Hybrid search (vector + BM25), RRF merge, metadata filtering (completed 2026-04-05)
 - [ ] **Phase 4: Consumer Surfaces** - MCP server + CLI thin wrappers over core
 - [ ] **Phase 5: File Watcher + Maintenance** - Incremental reindex, auto-compaction, pruning
 - [ ] **Phase 6: Ollama Adapter + Staleness Scoring** - Local embedding provider + recency decay
@@ -61,7 +61,7 @@ Plans:
   3. Search results include source file path, heading breadcrumb, relevance score, and chunk date for every result
   4. Filtering by `--after 2025-01-01` excludes chunks from files modified before that date
   5. A chunk from a file last modified 2 years ago ranks lower than an equivalent chunk from last month (recency weighting observable)
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 03-01-PLAN.md — Search types, FTS index helper, searcher module (vector/FTS/hybrid + filtering)
 - [ ] 03-02-PLAN.md — Integration tests with real LanceDB, runtime fix-up
@@ -106,7 +106,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete   | 2026-04-05 |
 | 2. Index Pipeline | 4/4 | Complete | 2026-04-05 |
-| 3. Query Pipeline | 0/2 | Not started | - |
+| 3. Query Pipeline | 2/2 | Complete   | 2026-04-05 |
 | 4. Consumer Surfaces | 0/0 | Not started | - |
 | 5. File Watcher + Maintenance | 0/0 | Not started | - |
 | 6. Ollama Adapter + Staleness Scoring | 0/0 | Not started | - |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-query-pipeline-03-01-PLAN.md
-last_updated: "2026-04-05T20:29:19.314Z"
+stopped_at: Completed 03-query-pipeline-03-02-PLAN.md
+last_updated: "2026-04-05T20:33:00.000Z"
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -23,8 +23,8 @@ See: .planning/PROJECT.md (updated 2026-04-05)
 
 ## Current Position
 
-Phase: 03 (query-pipeline) — EXECUTING
-Plan: 1 of 2
+Phase: 03 (query-pipeline) — COMPLETE
+Plan: 2 of 2 (complete)
 
 ## Performance Metrics
 
@@ -54,6 +54,7 @@ Plan: 1 of 2
 | Phase 02-index-pipeline P03 | 12 | 2 tasks | 4 files |
 | Phase 02-index-pipeline P04 | 12 | 2 tasks | 5 files |
 | Phase 03-query-pipeline P01 | 5 | 2 tasks | 5 files |
+| Phase 03-query-pipeline P02 | 2 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,7 @@ Recent decisions affecting current work:
 - [Phase 02-index-pipeline]: registerXxxCommand(program) pattern keeps CLI commands decoupled from entry point
 - [Phase 03-query-pipeline]: RRFReranker imported via lancedb.rerankers (not subpath — not in exports map)
 - [Phase 03-query-pipeline]: Arrow Schema field lookup via schema.fields.findIndex (not schema.fieldIndex — does not exist)
+- [Phase 03-query-pipeline P02]: RRF _relevance_score field name confirmed correct by real runtime; BigInt WHERE predicate works as plain JS number; no searcher.ts changes needed
 
 ### Pending Todos
 
@@ -93,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T20:29:19.312Z
-Stopped at: Completed 03-query-pipeline-03-01-PLAN.md
+Last session: 2026-04-05T20:33:00Z
+Stopped at: Completed 03-query-pipeline-03-02-PLAN.md
 Resume file: None
