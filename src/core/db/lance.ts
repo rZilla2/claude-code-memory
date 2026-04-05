@@ -40,3 +40,7 @@ export async function openChunksTable(
   logger.info('Created chunks table successfully');
   return table;
 }
+
+export async function deleteChunksByPath(table: lancedb.Table, sourcePath: string): Promise<void> {
+  await table.delete(`source_path = '${sourcePath.replace(/'/g, "''")}'`);
+}
