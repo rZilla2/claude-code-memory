@@ -25,6 +25,8 @@ const baseConfig: Config = {
   openaiModel: 'text-embedding-3-small',
   batchSize: 100,
   concurrency: 2,
+  ignorePaths: [],
+  includeExtensions: ['.md'],
 };
 
 describe('createEmbeddingProvider', () => {
