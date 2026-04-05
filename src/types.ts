@@ -8,3 +8,20 @@ export interface Config {
   ignorePaths: string[];
   includeExtensions: string[];
 }
+
+export interface SearchResult {
+  id: string;
+  sourcePath: string;
+  headingPath: string;
+  text: string;
+  score: number;
+  indexedAt: Date;
+}
+
+export interface SearchOptions {
+  topK?: number;
+  mode?: 'vector' | 'fts' | 'hybrid';
+  afterDate?: Date;
+  beforeDate?: Date;
+  sourceGlob?: string;
+}

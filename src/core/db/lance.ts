@@ -1,4 +1,5 @@
 import * as lancedb from '@lancedb/lancedb';
+import { Index } from '@lancedb/lancedb';
 import { Schema, Field, Utf8, Float32, FixedSizeList, Int64 } from 'apache-arrow';
 import { logger } from '../../logger.js';
 
@@ -43,4 +44,16 @@ export async function openChunksTable(
 
 export async function deleteChunksByPath(table: lancedb.Table, sourcePath: string): Promise<void> {
   await table.delete(`source_path = '${sourcePath.replace(/'/g, "''")}'`);
+}
+
+export async function ensureFtsIndex(table: lancedb.Table): Promise<void> {
+  await table.createIndex('text', {
+    config: Index.fts({
+      withPosition: true,
+      baseTokenizer: 'simple',
+      lowercase: true,
+    }),
+    replace: true,
+  });
+  logger.info('FTS index created/replaced on text column');
 }

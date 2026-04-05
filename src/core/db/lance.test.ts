@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { connectLanceDb, openChunksTable } from './lance.js';
+import { connectLanceDb, openChunksTable, ensureFtsIndex } from './lance.js';
 
 describe('connectLanceDb', () => {
   let tmpDir: string;
@@ -83,6 +83,28 @@ describe('openChunksTable', () => {
     expect(row).toHaveProperty('chunk_hash');
     expect(row).toHaveProperty('indexed_at');
     expect(row).toHaveProperty('embedding_model_id');
+  });
+
+  it('creates and replaces FTS index via ensureFtsIndex without error', async () => {
+    const db = await connectLanceDb(tmpDir);
+    const table = await openChunksTable(db, 4);
+
+    // Add a row so the table is non-empty before building FTS index
+    await table.add([
+      {
+        id: 'test/file.md#fts',
+        vector: [0.1, 0.2, 0.3, 0.4],
+        text: 'full text search test',
+        source_path: 'test/file.md',
+        heading_path: '# FTS',
+        chunk_hash: 'fts123',
+        indexed_at: Date.now(),
+        embedding_model_id: 'openai:text-embedding-3-small',
+      },
+    ]);
+
+    // Should resolve without throwing
+    await expect(ensureFtsIndex(table)).resolves.toBeUndefined();
   });
 
   it('vector field is a Float32 array of the specified dimension', async () => {
