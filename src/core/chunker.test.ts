@@ -1,0 +1,159 @@
+import { describe, it, expect } from 'vitest';
+import { chunkMarkdown, type Chunk } from './chunker.js';
+import { createHash } from 'crypto';
+
+function sha256(text: string): string {
+  return createHash('sha256').update(text, 'utf-8').digest('hex');
+}
+
+describe('chunkMarkdown', () => {
+  // Test 1: single H1 with body produces one chunk with breadcrumb
+  it('single H1 with body produces one chunk with headingPath and breadcrumb', () => {
+    const md = '# Introduction\n\nSome intro text here.';
+    const chunks = chunkMarkdown(md, 'test.md');
+
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0].headingPath).toBe('# Introduction');
+    expect(chunks[0].embeddableText).toBe('# Introduction\n\nSome intro text here.');
+    expect(chunks[0].id).toBe('test.md::# Introduction');
+  });
+
+  // Test 2: H1 > H2 > H3 hierarchy produces separate chunks with nested breadcrumbs
+  it('H1 > H2 > H3 hierarchy produces 3 chunks with nested breadcrumbs', () => {
+    const md = '# Top\n\nTop body\n## Middle\n\nMiddle body\n### Deep\n\nDeep body';
+    const chunks = chunkMarkdown(md, 'notes.md');
+
+    expect(chunks).toHaveLength(3);
+    expect(chunks[0].headingPath).toBe('# Top');
+    expect(chunks[1].headingPath).toBe('# Top > ## Middle');
+    expect(chunks[2].headingPath).toBe('# Top > ## Middle > ### Deep');
+
+    expect(chunks[1].embeddableText).toContain('# Top > ## Middle');
+    expect(chunks[2].embeddableText).toContain('# Top > ## Middle > ### Deep');
+  });
+
+  // Test 3: H4 inside H3 section stays in the H3 chunk (not split)
+  it('H4 headings stay inside their parent H3 chunk and do not cause a split', () => {
+    const md = '# Title\n\nIntro\n## Section\n\nBody\n### Sub\n\nSub body\n#### Detail\n\nDetail text';
+    const chunks = chunkMarkdown(md, 'test.md');
+
+    // Should be 3 chunks: # Title, # Title > ## Section, # Title > ## Section > ### Sub
+    // The #### Detail should be in the ### Sub chunk
+    expect(chunks).toHaveLength(3);
+    expect(chunks[2].headingPath).toBe('# Title > ## Section > ### Sub');
+    expect(chunks[2].embeddableText).toContain('Detail text');
+  });
+
+  // Test 4: file with no headings and <500 tokens produces exactly one chunk
+  it('file with no headings and under 500 tokens produces a single chunk with headingPath "(root)"', () => {
+    const md = 'Just some plain text without any headings.\n\nSecond paragraph here.';
+    const chunks = chunkMarkdown(md, 'plain.md');
+
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0].headingPath).toBe('(root)');
+    expect(chunks[0].id).toBe('plain.md::(root)');
+  });
+
+  // Test 5: file with no headings and >500 tokens splits at double newlines
+  it('file with no headings and over 500 tokens splits at double newlines', () => {
+    // Create content > 500 tokens (~2000 chars)
+    const para1 = 'A'.repeat(600);
+    const para2 = 'B'.repeat(600);
+    const para3 = 'C'.repeat(600);
+    const md = `${para1}\n\n${para2}\n\n${para3}`;
+    const chunks = chunkMarkdown(md, 'long.md');
+
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(chunks[0].headingPath).toBe('(root:1)');
+    expect(chunks[1].headingPath).toBe('(root:2)');
+  });
+
+  // Test 6: heading inside fenced code block does NOT cause a split
+  it('heading inside fenced code block does not cause a split', () => {
+    const md = '# Real Heading\n\nBody text\n\n```bash\n# This is a comment\necho hello\n```\n\nMore body';
+    const chunks = chunkMarkdown(md, 'code.md');
+
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0].headingPath).toBe('# Real Heading');
+    expect(chunks[0].embeddableText).toContain('This is a comment');
+  });
+
+  // Test 7: duplicate heading text gets collision suffix
+  it('duplicate heading text in same file gets -2 collision suffix', () => {
+    const md = '## Usage\n\nFirst usage section\n\n## Usage\n\nSecond usage section';
+    const chunks = chunkMarkdown(md, 'dup.md');
+
+    expect(chunks).toHaveLength(2);
+    expect(chunks[0].id).toBe('dup.md::## Usage');
+    expect(chunks[1].id).toBe('dup.md::## Usage-2');
+  });
+
+  // Test 8: chunk id format is "{relativePath}::{headingPath}"
+  it('chunk id is relativePath::headingPath', () => {
+    const md = '# My Note\n\nContent here';
+    const chunks = chunkMarkdown(md, '20 - Journal/2026-04-05.md');
+
+    expect(chunks[0].id).toBe('20 - Journal/2026-04-05.md::# My Note');
+  });
+
+  // Test 9: frontmatter (YAML between ---) is excluded from chunk body
+  it('frontmatter YAML is excluded from chunk body', () => {
+    const md = '---\ntitle: My Note\ntags: [test]\n---\n\n# Heading\n\nBody text only';
+    const chunks = chunkMarkdown(md, 'test.md');
+
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0].embeddableText).not.toContain('title: My Note');
+    expect(chunks[0].embeddableText).not.toContain('tags:');
+    expect(chunks[0].embeddableText).toContain('Body text only');
+  });
+
+  // Test 10: chunkHash is SHA-256 of embeddableText
+  it('chunkHash is SHA-256 of embeddableText', () => {
+    const md = '# Title\n\nContent';
+    const chunks = chunkMarkdown(md, 'test.md');
+
+    expect(chunks[0].chunkHash).toBe(sha256(chunks[0].embeddableText));
+  });
+
+  // Test 11: body text before first heading becomes a preamble chunk
+  it('body text before first heading becomes a preamble chunk', () => {
+    const md = 'Preamble text before any heading.\n\n# First Section\n\nSection body';
+    const chunks = chunkMarkdown(md, 'test.md');
+
+    expect(chunks).toHaveLength(2);
+    expect(chunks[0].headingPath).toBe('(root)');
+    expect(chunks[0].embeddableText).toContain('Preamble text before any heading.');
+    expect(chunks[1].headingPath).toBe('# First Section');
+  });
+
+  // Additional: Chunk interface fields are all present
+  it('every chunk has id, headingPath, embeddableText, and chunkHash fields', () => {
+    const md = '# Title\n\nContent';
+    const chunks = chunkMarkdown(md, 'test.md');
+
+    const chunk = chunks[0];
+    expect(chunk).toHaveProperty('id');
+    expect(chunk).toHaveProperty('headingPath');
+    expect(chunk).toHaveProperty('embeddableText');
+    expect(chunk).toHaveProperty('chunkHash');
+  });
+
+  // Frontmatter-only file produces no chunks (or just the headings below)
+  it('file with only frontmatter and a heading below excludes frontmatter from text', () => {
+    const md = '---\nalias: test\n---\n\n# Real Content\n\nSome text';
+    const chunks = chunkMarkdown(md, 'fm.md');
+
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0].headingPath).toBe('# Real Content');
+    expect(chunks[0].embeddableText).not.toContain('alias');
+  });
+
+  // H2 without parent H1 should just use H2 as top-level breadcrumb
+  it('H2 without parent H1 uses H2 as the breadcrumb root', () => {
+    const md = '## Standalone Section\n\nContent here';
+    const chunks = chunkMarkdown(md, 'test.md');
+
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0].headingPath).toBe('## Standalone Section');
+  });
+});
