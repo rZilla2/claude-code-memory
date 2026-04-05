@@ -129,8 +129,8 @@ describe('registerIndexCommand', () => {
 
     // In verbose mode, no progress bar written to stderr during progress callback
     // (stderr.write still called for newline at end, but not \r bar)
-    const stderrCalls = stderrSpy.mock.calls.map((c) => c[0] as string);
-    const hasProgressBar = stderrCalls.some((s) => s.includes('█') || s.includes('░'));
+    const stderrCalls = stderrSpy.mock.calls.map((c: unknown[]) => c[0] as string);
+    const hasProgressBar = stderrCalls.some((s: string) => s.includes('█') || s.includes('░'));
     expect(hasProgressBar).toBe(false);
 
     consoleSpy.mockRestore();
@@ -174,7 +174,7 @@ describe('registerIndexCommand', () => {
 
     // Progress bar written to stderr
     expect(stderrSpy).toHaveBeenCalled();
-    const stderrOutput = stderrSpy.mock.calls.map((c) => c[0] as string).join('');
+    const stderrOutput = stderrSpy.mock.calls.map((c: unknown[]) => c[0] as string).join('');
     expect(stderrOutput).toContain('5/5');
 
     consoleSpy.mockRestore();
