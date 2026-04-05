@@ -56,10 +56,10 @@ describe('chunkMarkdown', () => {
 
   // Test 5: file with no headings and >500 tokens splits at double newlines
   it('file with no headings and over 500 tokens splits at double newlines', () => {
-    // Create content > 500 tokens (~2000 chars)
-    const para1 = 'A'.repeat(600);
-    const para2 = 'B'.repeat(600);
-    const para3 = 'C'.repeat(600);
+    // Each paragraph is ~500 tokens (2000 chars), total >500 per paragraph triggers split
+    const para1 = 'A '.repeat(1000).trim(); // ~500 tokens
+    const para2 = 'B '.repeat(1000).trim(); // ~500 tokens
+    const para3 = 'C '.repeat(1000).trim(); // ~500 tokens
     const md = `${para1}\n\n${para2}\n\n${para3}`;
     const chunks = chunkMarkdown(md, 'long.md');
 
