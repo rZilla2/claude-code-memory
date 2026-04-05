@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 2 context gathered
-last_updated: "2026-04-05T18:04:58.357Z"
+stopped_at: Completed 02-index-pipeline 02-02-PLAN.md
+last_updated: "2026-04-05T18:36:30.435Z"
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 7
+  completed_plans: 4
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-05)
 
 **Core value:** Semantic recall across the entire vault — find what's relevant by meaning, not keywords
-**Current focus:** Phase 01 — foundation
+**Current focus:** Phase 02 — index-pipeline
 
 ## Current Position
 
-Phase: 01 (foundation) — EXECUTING
-Plan: 2 of 3
+Phase: 02 (index-pipeline) — EXECUTING
+Plan: 1 of 4
 
 ## Performance Metrics
 
@@ -49,6 +49,7 @@ Plan: 2 of 3
 | Phase 01-foundation P01 | 18 | 2 tasks | 14 files |
 | Phase 01-foundation P02 | 18 | 2 tasks | 4 files |
 | Phase 01-foundation P03 | 18 | 2 tasks | 5 files |
+| Phase 02-index-pipeline P02 | 2 | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,8 @@ Recent decisions affecting current work:
 - [Phase 01-foundation P02]: Int64 for indexed_at; SQLite PRAGMA busy_timeout returns key 'timeout'
 - [Phase 01-foundation]: EmbeddingProvider interface: embed()+modelId() only — minimal surface for maximum replaceability
 - [Phase 01-foundation]: modelId() returns 'provider:model-name' stable format for SQLite mismatch detection
+- [Phase 02-index-pipeline]: SHA-256 (built-in crypto) used for chunk hashing over xxhash — avoids native dep for vault-scale workloads
+- [Phase 02-index-pipeline]: Token estimate heuristic: charCount/4 for paragraph-split threshold — avoids tiktoken dep
 
 ### Pending Todos
 
@@ -80,6 +83,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T18:04:58.355Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-index-pipeline/02-CONTEXT.md
+Last session: 2026-04-05T18:36:30.433Z
+Stopped at: Completed 02-index-pipeline 02-02-PLAN.md
+Resume file: None
