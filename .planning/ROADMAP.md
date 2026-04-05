@@ -27,7 +27,11 @@
   3. LanceDB and SQLite clients initialize at `~/.claude-code-memory/` with correct schema including `embedding_model_id` and `schema_version` columns
   4. Calling `embed(["test"])` via the OpenAI adapter returns a vector array without error
   5. A schema version mismatch (different `embedding_model_id`) logs a warning and halts before any write
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 01-PLAN-01.md — Project scaffold, config loading, path safety, stderr logger
+- [ ] 01-PLAN-02.md — SQLite and LanceDB client initialization with schema versioning
+- [ ] 01-PLAN-03.md — Embedding provider interface, OpenAI adapter, factory
 
 ### Phase 2: Index Pipeline
 **Goal**: Real vault content is indexed end-to-end and can be queried for spot-check validation
@@ -91,7 +95,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/0 | Not started | - |
+| 1. Foundation | 0/3 | Planning complete | - |
 | 2. Index Pipeline | 0/0 | Not started | - |
 | 3. Query Pipeline | 0/0 | Not started | - |
 | 4. Consumer Surfaces | 0/0 | Not started | - |
