@@ -7,10 +7,10 @@
 
 ### Foundation
 
-- [ ] **FOUND-01**: System stores vector index at `~/.claude-code-memory/` (outside iCloud) to prevent sync corruption
-- [ ] **FOUND-02**: Configuration file defines vault path, embedding provider, index location, and chunking params
+- [x] **FOUND-01**: System stores vector index at `~/.claude-code-memory/` (outside iCloud) to prevent sync corruption
+- [x] **FOUND-02**: Configuration file defines vault path, embedding provider, index location, and chunking params
 - [ ] **FOUND-03**: Schema versioning tracks embedding model fingerprint to detect model mismatch
-- [ ] **FOUND-04**: All logging uses stderr (never stdout) to prevent MCP JSON-RPC stream corruption
+- [x] **FOUND-04**: All logging uses stderr (never stdout) to prevent MCP JSON-RPC stream corruption
 
 ### Indexing
 
@@ -100,10 +100,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Complete |
+| FOUND-02 | Phase 1 | Complete |
 | FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Complete |
 | IDX-01 | Phase 2 | Pending |
 | IDX-02 | Phase 2 | Pending |
 | IDX-03 | Phase 2 | Pending |
