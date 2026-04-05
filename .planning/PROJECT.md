@@ -12,18 +12,17 @@ Semantic recall across the entire vault — when Claude Code or Rod searches for
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Index entire Obsidian vault (thousands of .md files) into vector embeddings — Validated in Phase 2: index-pipeline
+- [x] Intelligent markdown-aware chunking (by heading/section, not fixed token windows) — Validated in Phase 2: index-pipeline
+- [x] Content hashing to skip re-embedding unchanged files — Validated in Phase 2: index-pipeline
 
 ### Active
 
-- [ ] Index entire Obsidian vault (thousands of .md files) into vector embeddings
 - [ ] MCP server so Claude Code can query memories semantically
 - [ ] CLI for user to search from terminal (`mem search "calendar setup"`)
 - [ ] Auto-reindex when vault files change (file watcher)
-- [ ] Intelligent markdown-aware chunking (by heading/section, not fixed token windows)
 - [ ] Hybrid search: vector similarity + full-text keyword search
 - [ ] Recency weighting and metadata filtering (date, source file, tags)
-- [ ] Content hashing to skip re-embedding unchanged files
 - [ ] Staleness controls (confidence decay over time)
 - [ ] Pluggable embedding provider (OpenAI default + Ollama adapter)
 - [ ] Index stored outside iCloud to prevent sync corruption
@@ -62,9 +61,9 @@ Semantic recall across the entire vault — when Claude Code or Rod searches for
 | TypeScript | MCP SDK is TS-native, matches Claude Code ecosystem, npm distribution natural. | — Pending |
 | Store index outside iCloud | iCloud sync can corrupt Lance format files. Vault is read-only input; index is derived data at ~/.claude-code-memory/ | — Pending |
 | Hybrid retrieval (vector + FTS) | Pure vector misses exact-match queries. LanceDB supports FTS natively. Merge with reciprocal rank fusion. | — Pending |
-| remark/unified for chunking | Markdown AST parsing splits by heading section. Biggest quality lever for retrieval. | — Pending |
+| remark/unified for chunking | Markdown AST parsing splits by heading section. Biggest quality lever for retrieval. | ✓ Validated Phase 2 |
 | chokidar v3 for file watching | v3.6.0 battle-tested on macOS FSEvents. v4 dropped platforms. Debounce 500ms+ for iCloud cascade events. | — Pending |
 | Pluggable embedding provider | Abstract with interface. Ship OpenAI + Ollama adapters. Prevents vendor lock-in for open-source users. | — Pending |
 
 ---
-*Last updated: 2026-04-05 after initialization*
+*Last updated: 2026-04-05 — Phase 2 (index-pipeline) complete*
