@@ -43,7 +43,12 @@ Plans:
   3. `mem status` reports file count, chunk count, last indexed timestamp, and embedding model name
   4. Each chunk stored includes source file path, heading breadcrumb, chunk hash, and last-indexed timestamp
   5. Running `mem index` a second time after editing one file only re-embeds the changed file's chunks
-**Plans**: TBD
+**Plans:** 4 plans
+Plans:
+- [ ] 02-01-PLAN.md — Install deps, extend Config, build vault scanner (IDX-01)
+- [ ] 02-02-PLAN.md — Remark AST heading chunker with breadcrumbs (IDX-02, IDX-03)
+- [ ] 02-03-PLAN.md — Indexer orchestrator with hash-gating and DB helpers (IDX-04, IDX-05)
+- [ ] 02-04-PLAN.md — CLI commands: mem index + mem status (IDX-06, IDX-07)
 
 ### Phase 3: Query Pipeline
 **Goal**: Semantic search returns relevant results ranked by meaning, recency, and staleness controls
@@ -96,7 +101,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete   | 2026-04-05 |
-| 2. Index Pipeline | 0/0 | Not started | - |
+| 2. Index Pipeline | 0/4 | Planning complete | - |
 | 3. Query Pipeline | 0/0 | Not started | - |
 | 4. Consumer Surfaces | 0/0 | Not started | - |
 | 5. File Watcher + Maintenance | 0/0 | Not started | - |
