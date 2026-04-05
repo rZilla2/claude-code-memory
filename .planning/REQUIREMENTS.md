@@ -9,7 +9,7 @@
 
 - [x] **FOUND-01**: System stores vector index at `~/.claude-code-memory/` (outside iCloud) to prevent sync corruption
 - [x] **FOUND-02**: Configuration file defines vault path, embedding provider, index location, and chunking params
-- [ ] **FOUND-03**: Schema versioning tracks embedding model fingerprint to detect model mismatch
+- [x] **FOUND-03**: Schema versioning tracks embedding model fingerprint to detect model mismatch
 - [x] **FOUND-04**: All logging uses stderr (never stdout) to prevent MCP JSON-RPC stream corruption
 
 ### Indexing
@@ -49,10 +49,10 @@
 
 ### Embedding Providers
 
-- [ ] **EMB-01**: Pluggable embedding interface: `embed(texts: string[]): Promise<number[][]>`
-- [ ] **EMB-02**: OpenAI text-embedding-3-small adapter ships as default
+- [x] **EMB-01**: Pluggable embedding interface: `embed(texts: string[]): Promise<number[][]>`
+- [x] **EMB-02**: OpenAI text-embedding-3-small adapter ships as default
 - [ ] **EMB-03**: Ollama/nomic-embed-text adapter ships as local alternative
-- [ ] **EMB-04**: Switching embedding provider triggers full reindex warning (model fingerprint mismatch)
+- [x] **EMB-04**: Switching embedding provider triggers full reindex warning (model fingerprint mismatch)
 
 ### File Watcher
 
@@ -102,7 +102,7 @@
 |-------------|-------|--------|
 | FOUND-01 | Phase 1 | Complete |
 | FOUND-02 | Phase 1 | Complete |
-| FOUND-03 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Complete |
 | FOUND-04 | Phase 1 | Complete |
 | IDX-01 | Phase 2 | Pending |
 | IDX-02 | Phase 2 | Pending |
@@ -127,10 +127,10 @@
 | CLI-03 | Phase 4 | Pending |
 | CLI-04 | Phase 4 | Pending |
 | CLI-05 | Phase 4 | Pending |
-| EMB-01 | Phase 1 | Pending |
-| EMB-02 | Phase 1 | Pending |
+| EMB-01 | Phase 1 | Complete |
+| EMB-02 | Phase 1 | Complete |
 | EMB-03 | Phase 6 | Pending |
-| EMB-04 | Phase 1 | Pending |
+| EMB-04 | Phase 1 | Complete |
 | WATCH-01 | Phase 5 | Pending |
 | WATCH-02 | Phase 5 | Pending |
 | WATCH-03 | Phase 5 | Pending |

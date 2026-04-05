@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-foundation/01-01-PLAN.md
-last_updated: "2026-04-05T17:42:22.448Z"
+stopped_at: Completed 01-foundation/01-03-PLAN.md
+last_updated: "2026-04-05T17:46:35.697Z"
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 3
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-04-05)
 ## Current Position
 
 Phase: 01 (foundation) — EXECUTING
-Plan: 1 of 3
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -47,6 +47,8 @@ Plan: 1 of 3
 
 *Updated after each plan completion*
 | Phase 01-foundation P01 | 18 | 2 tasks | 14 files |
+| Phase 01-foundation P02 | 18 | 2 tasks | 4 files |
+| Phase 01-foundation P03 | 18 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -62,6 +64,10 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: zod v4 accepted: npm resolved v4.3.6 over planned v3.25.x — APIs backward compatible
 - [Phase 01-foundation]: tsconfig types: ['node'] required with TypeScript 6 + moduleResolution: bundler
 - [Phase 01-foundation]: vaultPath has no default — callers must supply via env var or override
+- [Phase 01-foundation P02]: LanceDB createEmptyTable uses Arrow Schema (not dummy-row pattern)
+- [Phase 01-foundation P02]: Int64 for indexed_at; SQLite PRAGMA busy_timeout returns key 'timeout'
+- [Phase 01-foundation]: EmbeddingProvider interface: embed()+modelId() only — minimal surface for maximum replaceability
+- [Phase 01-foundation]: modelId() returns 'provider:model-name' stable format for SQLite mismatch detection
 
 ### Pending Todos
 
@@ -74,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T17:42:22.447Z
-Stopped at: Completed 01-foundation/01-01-PLAN.md
+Last session: 2026-04-05T17:46:35.695Z
+Stopped at: Completed 01-foundation/01-03-PLAN.md
 Resume file: None
