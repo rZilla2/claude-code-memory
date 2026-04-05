@@ -9,7 +9,7 @@
 ## Phases
 
 - [x] **Phase 1: Foundation** - Config, DB clients, embedding interface, path safety (completed 2026-04-05)
-- [ ] **Phase 2: Index Pipeline** - Scanner, AST chunker, bulk indexer with hash-gating
+- [x] **Phase 2: Index Pipeline** - Scanner, AST chunker, bulk indexer with hash-gating (completed 2026-04-05)
 - [ ] **Phase 3: Query Pipeline** - Hybrid search (vector + BM25), RRF merge, metadata filtering
 - [ ] **Phase 4: Consumer Surfaces** - MCP server + CLI thin wrappers over core
 - [ ] **Phase 5: File Watcher + Maintenance** - Incremental reindex, auto-compaction, pruning
@@ -29,9 +29,9 @@
   5. A schema version mismatch (different `embedding_model_id`) logs a warning and halts before any write
 **Plans:** 3/3 plans complete
 Plans:
-- [ ] 01-PLAN-01.md — Project scaffold, config loading, path safety, stderr logger
-- [ ] 01-PLAN-02.md — SQLite and LanceDB client initialization with schema versioning
-- [ ] 01-PLAN-03.md — Embedding provider interface, OpenAI adapter, factory
+- [x] 01-PLAN-01.md — Project scaffold, config loading, path safety, stderr logger
+- [x] 01-PLAN-02.md — SQLite and LanceDB client initialization with schema versioning
+- [x] 01-PLAN-03.md — Embedding provider interface, OpenAI adapter, factory
 
 ### Phase 2: Index Pipeline
 **Goal**: Real vault content is indexed end-to-end and can be queried for spot-check validation
@@ -43,24 +43,28 @@ Plans:
   3. `mem status` reports file count, chunk count, last indexed timestamp, and embedding model name
   4. Each chunk stored includes source file path, heading breadcrumb, chunk hash, and last-indexed timestamp
   5. Running `mem index` a second time after editing one file only re-embeds the changed file's chunks
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans complete
 Plans:
-- [ ] 02-01-PLAN.md — Install deps, extend Config, build vault scanner (IDX-01)
-- [ ] 02-02-PLAN.md — Remark AST heading chunker with breadcrumbs (IDX-02, IDX-03)
-- [ ] 02-03-PLAN.md — Indexer orchestrator with hash-gating and DB helpers (IDX-04, IDX-05)
-- [ ] 02-04-PLAN.md — CLI commands: mem index + mem status (IDX-06, IDX-07)
+- [x] 02-01-PLAN.md — Install deps, extend Config, build vault scanner (IDX-01)
+- [x] 02-02-PLAN.md — Remark AST heading chunker with breadcrumbs (IDX-02, IDX-03)
+- [x] 02-03-PLAN.md — Indexer orchestrator with hash-gating and DB helpers (IDX-04, IDX-05)
+- [x] 02-04-PLAN.md — CLI commands: mem index + mem status (IDX-06, IDX-07)
 
 ### Phase 3: Query Pipeline
-**Goal**: Semantic search returns relevant results ranked by meaning, recency, and staleness controls
+**Goal**: Hybrid search pipeline returns relevant results via vector similarity, keyword matching, and RRF merge with metadata filtering
 **Depends on**: Phase 2
 **Requirements**: SRCH-01, SRCH-02, SRCH-03, SRCH-04, SRCH-05, SRCH-06, SRCH-07
+**Note**: SRCH-06 (recency weighting) and SRCH-07 (staleness decay) are deferred to Phase 6 per REQUIREMENTS.md traceability. Phase 3 implements SRCH-01 through SRCH-05.
 **Success Criteria** (what must be TRUE):
   1. `mem search "calendar setup"` returns chunks semantically related to calendar configuration even if the words "calendar" or "setup" don't appear
   2. An exact-phrase query returns the exact-match chunk in the top 3 results (BM25 contribution)
   3. Search results include source file path, heading breadcrumb, relevance score, and chunk date for every result
   4. Filtering by `--after 2025-01-01` excludes chunks from files modified before that date
   5. A chunk from a file last modified 2 years ago ranks lower than an equivalent chunk from last month (recency weighting observable)
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Search types, FTS index helper, searcher module (vector/FTS/hybrid + filtering)
+- [ ] 03-02-PLAN.md — Integration tests with real LanceDB, runtime fix-up
 
 ### Phase 4: Consumer Surfaces
 **Goal**: Claude Code can query memories via MCP and Rod can search from the terminal via CLI
@@ -101,8 +105,8 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete   | 2026-04-05 |
-| 2. Index Pipeline | 3/4 | In Progress|  |
-| 3. Query Pipeline | 0/0 | Not started | - |
+| 2. Index Pipeline | 4/4 | Complete | 2026-04-05 |
+| 3. Query Pipeline | 0/2 | Not started | - |
 | 4. Consumer Surfaces | 0/0 | Not started | - |
 | 5. File Watcher + Maintenance | 0/0 | Not started | - |
 | 6. Ollama Adapter + Staleness Scoring | 0/0 | Not started | - |
