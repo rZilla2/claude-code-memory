@@ -94,4 +94,34 @@ describe('loadConfig', () => {
       loadConfig({ vaultPath: '/tmp/safe-vault', indexPath: badPath }),
     ).toThrow(/iCloud|Mobile Documents/);
   });
+
+  it('returns empty array default for ignorePaths', async () => {
+    const { loadConfig } = await import('./config.js');
+    const config = loadConfig({ vaultPath: '/tmp/test-vault-ignorepaths' });
+    expect(config.ignorePaths).toEqual([]);
+  });
+
+  it('returns [".md"] default for includeExtensions', async () => {
+    const { loadConfig } = await import('./config.js');
+    const config = loadConfig({ vaultPath: '/tmp/test-vault-extensions' });
+    expect(config.includeExtensions).toEqual(['.md']);
+  });
+
+  it('accepts custom ignorePaths override', async () => {
+    const { loadConfig } = await import('./config.js');
+    const config = loadConfig({
+      vaultPath: '/tmp/test-vault-custom-ignore',
+      ignorePaths: ['90 - Attachments', 'Archive'],
+    });
+    expect(config.ignorePaths).toEqual(['90 - Attachments', 'Archive']);
+  });
+
+  it('accepts custom includeExtensions override', async () => {
+    const { loadConfig } = await import('./config.js');
+    const config = loadConfig({
+      vaultPath: '/tmp/test-vault-custom-ext',
+      includeExtensions: ['.md', '.txt'],
+    });
+    expect(config.includeExtensions).toEqual(['.md', '.txt']);
+  });
 });

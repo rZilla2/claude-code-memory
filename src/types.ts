@@ -5,4 +5,6 @@ export interface Config {
   openaiModel: string;
   batchSize: number;
   concurrency: number;
+  ignorePaths: string[];
+  includeExtensions: string[];
 }

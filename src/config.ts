@@ -11,6 +11,8 @@ export const ConfigSchema = z.object({
   openaiModel: z.string().default('text-embedding-3-small'),
   batchSize: z.number().default(100),
   concurrency: z.number().default(2),
+  ignorePaths: z.array(z.string()).default([]),
+  includeExtensions: z.array(z.string()).default(['.md']),
 });
 
 export function assertPathSafety(indexPath: string): void {
