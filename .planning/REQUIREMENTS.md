@@ -24,11 +24,11 @@
 
 ### Search
 
-- [ ] **SRCH-01**: Vector similarity search returns semantically relevant chunks for a natural language query
-- [ ] **SRCH-02**: Full-text keyword search (BM25) returns exact-match results
-- [ ] **SRCH-03**: Hybrid search merges vector + FTS results using reciprocal rank fusion (RRF)
-- [ ] **SRCH-04**: Results include metadata: source file, heading path, relevance score, chunk date
-- [ ] **SRCH-05**: Results support filtering by date range, source file glob, or hub/folder
+- [x] **SRCH-01**: Vector similarity search returns semantically relevant chunks for a natural language query
+- [x] **SRCH-02**: Full-text keyword search (BM25) returns exact-match results
+- [x] **SRCH-03**: Hybrid search merges vector + FTS results using reciprocal rank fusion (RRF)
+- [x] **SRCH-04**: Results include metadata: source file, heading path, relevance score, chunk date
+- [x] **SRCH-05**: Results support filtering by date range, source file glob, or hub/folder
 - [ ] **SRCH-06**: Recency weighting boosts newer chunks over older ones
 - [ ] **SRCH-07**: Configurable staleness decay reduces relevance score for old content
 
@@ -111,11 +111,11 @@
 | IDX-05 | Phase 2 | Complete |
 | IDX-06 | Phase 2 | Complete |
 | IDX-07 | Phase 2 | Complete |
-| SRCH-01 | Phase 3 | Pending |
-| SRCH-02 | Phase 3 | Pending |
-| SRCH-03 | Phase 3 | Pending |
-| SRCH-04 | Phase 3 | Pending |
-| SRCH-05 | Phase 3 | Pending |
+| SRCH-01 | Phase 3 | Complete |
+| SRCH-02 | Phase 3 | Complete |
+| SRCH-03 | Phase 3 | Complete |
+| SRCH-04 | Phase 3 | Complete |
+| SRCH-05 | Phase 3 | Complete |
 | SRCH-06 | Phase 6 | Pending |
 | SRCH-07 | Phase 6 | Pending |
 | MCP-01 | Phase 4 | Pending |

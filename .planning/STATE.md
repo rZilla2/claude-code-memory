@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-index-pipeline-02-04-PLAN.md
-last_updated: "2026-04-05T18:47:07.729Z"
+stopped_at: Completed 03-query-pipeline-03-01-PLAN.md
+last_updated: "2026-04-05T20:29:19.314Z"
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 9
+  completed_plans: 8
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-05)
 
 **Core value:** Semantic recall across the entire vault — find what's relevant by meaning, not keywords
-**Current focus:** Phase 02 — index-pipeline
+**Current focus:** Phase 03 — query-pipeline
 
 ## Current Position
 
-Phase: 02 (index-pipeline) — EXECUTING
-Plan: 1 of 4
+Phase: 03 (query-pipeline) — EXECUTING
+Plan: 1 of 2
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Plan: 1 of 4
 | Phase 02-index-pipeline P01 | 2 | 2 tasks | 8 files |
 | Phase 02-index-pipeline P03 | 12 | 2 tasks | 4 files |
 | Phase 02-index-pipeline P04 | 12 | 2 tasks | 5 files |
+| Phase 03-query-pipeline P01 | 5 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - [Phase 02-index-pipeline]: Retry logic: one retry per file before marking failed; hash gate uses SHA-256 of file content; deleteChunksByPath before table.add prevents stale contradictions
 - [Phase 02-index-pipeline]: Progress bar uses stderr \r overwrite with Unicode block chars (no library dep, MCP-safe)
 - [Phase 02-index-pipeline]: registerXxxCommand(program) pattern keeps CLI commands decoupled from entry point
+- [Phase 03-query-pipeline]: RRFReranker imported via lancedb.rerankers (not subpath — not in exports map)
+- [Phase 03-query-pipeline]: Arrow Schema field lookup via schema.fields.findIndex (not schema.fieldIndex — does not exist)
 
 ### Pending Todos
 
@@ -90,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T18:44:22.315Z
-Stopped at: Completed 02-index-pipeline-02-04-PLAN.md
+Last session: 2026-04-05T20:29:19.312Z
+Stopped at: Completed 03-query-pipeline-03-01-PLAN.md
 Resume file: None
