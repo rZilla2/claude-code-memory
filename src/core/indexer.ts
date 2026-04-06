@@ -5,7 +5,7 @@ import type { Config } from '../types.js';
 import type { EmbeddingProvider } from './embedder/types.js';
 import { scanVault } from './scanner.js';
 import { chunkMarkdown } from './chunker.js';
-import { getFileHash, upsertFile } from './db/sqlite.js';
+import { getFileHash, upsertFile, deleteFileMetadata } from './db/sqlite.js';
 import { deleteChunksByPath } from './db/lance.js';
 import { logger } from '../logger.js';
 import type Database from 'better-sqlite3';
@@ -45,10 +45,13 @@ export async function indexFile(
     return { status: 'skipped', chunksCreated: 0 };
   }
 
-  // 3. Delete stale chunks BEFORE inserting new ones
+  // 3. Remove SQLite hash first so a crash forces re-index
+  deleteFileMetadata(db, filePath);
+
+  // 4. Delete stale chunks BEFORE inserting new ones
   await deleteChunksByPath(table, filePath);
 
-  // 4. Chunk the file
+  // 5. Chunk the file
   const relativePath = relative(config.vaultPath, filePath);
   const chunks = chunkMarkdown(content, relativePath);
 
@@ -57,11 +60,11 @@ export async function indexFile(
     return { status: 'indexed', chunksCreated: 0 };
   }
 
-  // 5. Embed all chunks
+  // 6. Embed all chunks
   const texts = chunks.map(c => c.embeddableText);
   const vectors = await embedder.embed(texts);
 
-  // 6. Insert into LanceDB
+  // 7. Insert into LanceDB
   const rows = chunks.map((c, i) => ({
     id: c.id,
     vector: vectors[i],
@@ -75,7 +78,7 @@ export async function indexFile(
 
   await table.add(rows);
 
-  // 7. Update SQLite metadata
+  // 8. Update SQLite metadata (after successful LanceDB add)
   upsertFile(db, {
     path: filePath,
     content_hash: fileHash,

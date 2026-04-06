@@ -2,6 +2,7 @@ import type * as lancedb from '@lancedb/lancedb';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { logger } from '../../logger.js';
+import { sanitizeLanceFilter } from '../../core/db/lance.js';
 
 interface ChunkRow {
   id: string;
@@ -44,10 +45,23 @@ export function registerGetContextTool(server: McpServer, table: lancedb.Table):
     { chunkId: z.string().describe('The chunk ID from a search_memory result') },
     async ({ chunkId }) => {
       try {
+        // Validate chunkId format (file path + heading)
+        if (!/^[a-zA-Z0-9 /_.,#:>()@-]+$/.test(chunkId)) {
+          return {
+            content: [
+              {
+                type: 'text' as const,
+                text: JSON.stringify({ error: `Invalid chunk ID format: ${chunkId}` }),
+              },
+            ],
+            isError: true,
+          };
+        }
+
         // Query target chunk by ID
         const targetRows = await table
           .query()
-          .where(`id = '${chunkId.replace(/'/g, "''")}'`)
+          .where(`id = '${sanitizeLanceFilter(chunkId)}'`)
           .select(SELECT_COLS)
           .limit(1)
           .toArray();
@@ -69,8 +83,9 @@ export function registerGetContextTool(server: McpServer, table: lancedb.Table):
         // Query all chunks from the same source file
         const siblingRows = await table
           .query()
-          .where(`source_path = '${target.source_path.replace(/'/g, "''")}'`)
+          .where(`source_path = '${sanitizeLanceFilter(target.source_path)}'`)
           .select(SELECT_COLS)
+          .limit(500)
           .toArray();
 
         // Sort by heading_path to establish positional order

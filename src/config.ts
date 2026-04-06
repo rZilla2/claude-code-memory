@@ -3,6 +3,7 @@ import { homedir } from 'os';
 import { join, resolve } from 'path';
 import { readFileSync, existsSync } from 'fs';
 import type { Config } from './types.js';
+import { logger } from './logger.js';
 
 export const ConfigSchema = z.object({
   vaultPath: z.string(),
@@ -38,8 +39,8 @@ export function loadConfig(overrides?: Partial<Config>): Config {
     try {
       const data = JSON.parse(readFileSync(globalConfig, 'utf-8'));
       Object.assign(partial, data);
-    } catch {
-      // Ignore parse errors — defaults apply
+    } catch (e) {
+      logger.warn('Failed to parse config', { path: globalConfig, error: String(e) });
     }
   }
 
@@ -53,8 +54,8 @@ export function loadConfig(overrides?: Partial<Config>): Config {
       try {
         const data = JSON.parse(readFileSync(vaultConfig, 'utf-8'));
         Object.assign(partial, data);
-      } catch {
-        // Ignore parse errors — defaults apply
+      } catch (e) {
+        logger.warn('Failed to parse config', { path: vaultConfig, error: String(e) });
       }
     }
   }

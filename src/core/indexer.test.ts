@@ -20,6 +20,7 @@ vi.mock('./chunker.js', () => ({
 vi.mock('./db/sqlite.js', () => ({
   getFileHash: vi.fn(),
   upsertFile: vi.fn(),
+  deleteFileMetadata: vi.fn(),
 }));
 
 vi.mock('./db/lance.js', () => ({

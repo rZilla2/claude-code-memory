@@ -61,8 +61,7 @@ export async function startMcpServer(config: Config): Promise<void> {
     },
   });
 
-  // Cleanup on exit
-  process.on('exit', () => { watcher.close(); });
+  // Cleanup on signals (exit handler removed — it cannot run async watcher.close())
   process.on('SIGINT', async () => { await watcher.close(); process.exit(0); });
   process.on('SIGTERM', async () => { await watcher.close(); process.exit(0); });
 

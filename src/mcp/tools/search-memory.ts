@@ -34,6 +34,25 @@ export function registerSearchMemoryTool(
     },
     async (args) => {
       try {
+        if (args.afterDate) {
+          const d = new Date(args.afterDate);
+          if (isNaN(d.getTime())) {
+            return {
+              content: [{ type: 'text' as const, text: JSON.stringify({ error: 'Invalid date: ' + args.afterDate }) }],
+              isError: true,
+            };
+          }
+        }
+        if (args.beforeDate) {
+          const d = new Date(args.beforeDate);
+          if (isNaN(d.getTime())) {
+            return {
+              content: [{ type: 'text' as const, text: JSON.stringify({ error: 'Invalid date: ' + args.beforeDate }) }],
+              isError: true,
+            };
+          }
+        }
+
         const options = {
           topK: args.limit ?? 5,
           mode: (args.mode ?? 'hybrid') as 'vector' | 'fts' | 'hybrid',

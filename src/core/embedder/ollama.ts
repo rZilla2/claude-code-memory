@@ -1,13 +1,5 @@
 import type { EmbeddingProvider } from './types.js';
-
-/** Split an array into chunks of the given size. */
-function chunk<T>(array: T[], size: number): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size));
-  }
-  return chunks;
-}
+import { chunk } from './utils.js';
 
 export class OllamaEmbeddingProvider implements EmbeddingProvider {
   private readonly model: string;

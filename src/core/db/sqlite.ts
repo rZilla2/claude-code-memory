@@ -87,11 +87,10 @@ export function getCompactionMetadata(db: Database.Database): { lastCompactedAt:
 }
 
 export function incrementUpdateCounter(db: Database.Database, count: number): void {
-  const current = getCompactionMetadata(db).updatesSinceCompact;
   db.prepare(`
     INSERT INTO index_metadata (key, value) VALUES ('updates_since_compact', ?)
-    ON CONFLICT(key) DO UPDATE SET value = ?
-  `).run(String(current + count), String(current + count));
+    ON CONFLICT(key) DO UPDATE SET value = CAST(value AS INTEGER) + ?
+  `).run(String(count), count);
 }
 
 export function recordCompaction(db: Database.Database): void {

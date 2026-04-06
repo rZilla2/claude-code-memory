@@ -3,6 +3,12 @@ import { Index } from '@lancedb/lancedb';
 import { Schema, Field, Utf8, Float32, FixedSizeList, Int64 } from 'apache-arrow';
 import { logger } from '../../logger.js';
 
+/** Strip unsafe characters and escape quotes for LanceDB filter predicates. */
+export function sanitizeLanceFilter(value: string): string {
+  const stripped = value.replace(/[^a-zA-Z0-9 /_.,#:>()@%*-]/g, '');
+  return stripped.replace(/'/g, "''");
+}
+
 export async function connectLanceDb(dbPath: string): Promise<lancedb.Connection> {
   const db = await lancedb.connect(dbPath);
   logger.info('Connected to LanceDB', { path: dbPath });
@@ -43,11 +49,11 @@ export async function openChunksTable(
 }
 
 export async function deleteChunksByPath(table: lancedb.Table, sourcePath: string): Promise<void> {
-  await table.delete(`source_path = '${sourcePath.replace(/'/g, "''")}'`);
+  await table.delete(`source_path = '${sanitizeLanceFilter(sourcePath)}'`);
 }
 
 export async function getChunksByPath(table: lancedb.Table, sourcePath: string): Promise<Array<Record<string, unknown>>> {
-  const escaped = sourcePath.replace(/'/g, "''");
+  const escaped = sanitizeLanceFilter(sourcePath);
   const results = await table.query().where(`source_path = '${escaped}'`).toArray();
   return results.map(row => ({ ...row }));
 }
@@ -60,7 +66,10 @@ export async function updateChunksSourcePath(table: lancedb.Table, oldPath: stri
   await table.add(updated);
 }
 
+let ftsIndexCreated = false;
+
 export async function ensureFtsIndex(table: lancedb.Table): Promise<void> {
+  if (ftsIndexCreated) return;
   await table.createIndex('text', {
     config: Index.fts({
       withPosition: true,
@@ -69,5 +78,6 @@ export async function ensureFtsIndex(table: lancedb.Table): Promise<void> {
     }),
     replace: true,
   });
+  ftsIndexCreated = true;
   logger.info('FTS index created/replaced on text column');
 }
