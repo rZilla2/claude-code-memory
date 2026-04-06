@@ -2,6 +2,11 @@
 import { Command } from 'commander';
 import { registerIndexCommand } from './commands/index-cmd.js';
 import { registerStatusCommand } from './commands/status-cmd.js';
+import { registerSearchCommand } from './commands/search-cmd.js';
+import { registerConfigCommand } from './commands/config-cmd.js';
+import { runFirstTimeSetup } from './first-run.js';
+
+runFirstTimeSetup();
 
 const program = new Command();
 program
@@ -11,5 +16,7 @@ program
 
 registerIndexCommand(program);
 registerStatusCommand(program);
+registerSearchCommand(program);
+registerConfigCommand(program);
 
 program.parse();
