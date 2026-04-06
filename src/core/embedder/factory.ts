@@ -1,6 +1,7 @@
 import type { Config } from '../../types.js';
 import type { EmbeddingProvider } from './types.js';
 import { OpenAIEmbeddingProvider } from './openai.js';
+import { OllamaEmbeddingProvider } from './ollama.js';
 
 export function createEmbeddingProvider(config: Config): EmbeddingProvider {
   if (config.embeddingProvider === 'openai') {
@@ -12,7 +13,7 @@ export function createEmbeddingProvider(config: Config): EmbeddingProvider {
   }
 
   if (config.embeddingProvider === 'ollama') {
-    throw new Error('Ollama embedding provider is not yet implemented (planned for Phase 6)');
+    return new OllamaEmbeddingProvider(config.ollamaModel, config.ollamaBaseUrl);
   }
 
   throw new Error(`Unknown embedding provider: ${config.embeddingProvider}`);

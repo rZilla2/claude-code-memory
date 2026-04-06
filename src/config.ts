@@ -9,6 +9,8 @@ export const ConfigSchema = z.object({
   indexPath: z.string().default(join(homedir(), '.claude-code-memory')),
   embeddingProvider: z.enum(['openai', 'ollama']).default('openai'),
   openaiModel: z.string().default('text-embedding-3-small'),
+  ollamaModel: z.string().default('nomic-embed-text'),
+  ollamaBaseUrl: z.string().default('http://localhost:11434'),
   batchSize: z.number().default(100),
   concurrency: z.number().default(2),
   ignorePaths: z.array(z.string()).default([]),

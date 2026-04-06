@@ -15,14 +15,21 @@ vi.mock('p-limit', () => ({
   default: vi.fn((_concurrency: number) => (fn: () => unknown) => fn()),
 }));
 
+vi.mock('./ollama.js', () => ({
+  OllamaEmbeddingProvider: vi.fn(),
+}));
+
 import { createEmbeddingProvider } from './factory.js';
 import { OpenAIEmbeddingProvider } from './openai.js';
+import { OllamaEmbeddingProvider } from './ollama.js';
 
 const baseConfig: Config = {
   vaultPath: '/test/vault',
   indexPath: '/test/index',
   embeddingProvider: 'openai',
   openaiModel: 'text-embedding-3-small',
+  ollamaModel: 'nomic-embed-text',
+  ollamaBaseUrl: 'http://localhost:11434',
   batchSize: 100,
   concurrency: 2,
   ignorePaths: [],
@@ -50,8 +57,19 @@ describe('createEmbeddingProvider', () => {
     expect(() => createEmbeddingProvider(baseConfig)).toThrow('OPENAI_API_KEY');
   });
 
-  it('throws "not yet implemented" error for "ollama" provider', () => {
+  it('returns OllamaEmbeddingProvider when embeddingProvider is "ollama"', () => {
     const config: Config = { ...baseConfig, embeddingProvider: 'ollama' };
-    expect(() => createEmbeddingProvider(config)).toThrow(/not yet implemented|Phase 6/i);
+    createEmbeddingProvider(config);
+    expect(OllamaEmbeddingProvider).toHaveBeenCalledWith('nomic-embed-text', 'http://localhost:11434');
+  });
+
+  it('passes custom ollamaModel to OllamaEmbeddingProvider', () => {
+    const config: Config = {
+      ...baseConfig,
+      embeddingProvider: 'ollama',
+      ollamaModel: 'mxbai-embed-large',
+    };
+    createEmbeddingProvider(config);
+    expect(OllamaEmbeddingProvider).toHaveBeenCalledWith('mxbai-embed-large', 'http://localhost:11434');
   });
 });

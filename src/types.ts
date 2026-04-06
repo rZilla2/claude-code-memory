@@ -3,10 +3,13 @@ export interface Config {
   indexPath: string;
   embeddingProvider: 'openai' | 'ollama';
   openaiModel: string;
+  ollamaModel?: string;
+  ollamaBaseUrl?: string;
   batchSize: number;
   concurrency: number;
   ignorePaths: string[];
   includeExtensions: string[];
+  stalenessDecayRate: number;
 }
 
 export interface SearchResult {
@@ -24,4 +27,5 @@ export interface SearchOptions {
   afterDate?: Date;
   beforeDate?: Date;
   sourceGlob?: string;
+  stalenessDecayRate?: number;
 }
