@@ -46,6 +46,20 @@ export async function deleteChunksByPath(table: lancedb.Table, sourcePath: strin
   await table.delete(`source_path = '${sourcePath.replace(/'/g, "''")}'`);
 }
 
+export async function getChunksByPath(table: lancedb.Table, sourcePath: string): Promise<Array<Record<string, unknown>>> {
+  const escaped = sourcePath.replace(/'/g, "''");
+  const results = await table.query().where(`source_path = '${escaped}'`).toArray();
+  return results.map(row => ({ ...row }));
+}
+
+export async function updateChunksSourcePath(table: lancedb.Table, oldPath: string, newPath: string): Promise<void> {
+  const rows = await getChunksByPath(table, oldPath);
+  if (rows.length === 0) return;
+  await deleteChunksByPath(table, oldPath);
+  const updated = rows.map(row => ({ ...row, source_path: newPath }));
+  await table.add(updated);
+}
+
 export async function ensureFtsIndex(table: lancedb.Table): Promise<void> {
   await table.createIndex('text', {
     config: Index.fts({

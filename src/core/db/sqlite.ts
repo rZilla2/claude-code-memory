@@ -77,6 +77,47 @@ export function getStatus(db: Database.Database): StatusResult {
   };
 }
 
+export function getCompactionMetadata(db: Database.Database): { lastCompactedAt: number; updatesSinceCompact: number } {
+  const rowLast = db.prepare("SELECT value FROM index_metadata WHERE key = 'last_compacted_at'").get() as { value: string } | undefined;
+  const rowUpdates = db.prepare("SELECT value FROM index_metadata WHERE key = 'updates_since_compact'").get() as { value: string } | undefined;
+  return {
+    lastCompactedAt: rowLast ? parseInt(rowLast.value, 10) : 0,
+    updatesSinceCompact: rowUpdates ? parseInt(rowUpdates.value, 10) : 0,
+  };
+}
+
+export function incrementUpdateCounter(db: Database.Database, count: number): void {
+  const current = getCompactionMetadata(db).updatesSinceCompact;
+  db.prepare(`
+    INSERT INTO index_metadata (key, value) VALUES ('updates_since_compact', ?)
+    ON CONFLICT(key) DO UPDATE SET value = ?
+  `).run(String(current + count), String(current + count));
+}
+
+export function recordCompaction(db: Database.Database): void {
+  db.prepare(`
+    INSERT INTO index_metadata (key, value) VALUES ('last_compacted_at', ?)
+    ON CONFLICT(key) DO UPDATE SET value = ?
+  `).run(String(Date.now()), String(Date.now()));
+  db.prepare(`
+    INSERT INTO index_metadata (key, value) VALUES ('updates_since_compact', '0')
+    ON CONFLICT(key) DO UPDATE SET value = '0'
+  `).run();
+}
+
+export function updateSourcePath(db: Database.Database, oldPath: string, newPath: string): void {
+  db.prepare('UPDATE files SET path = ? WHERE path = ?').run(newPath, oldPath);
+}
+
+export function getAllFilePaths(db: Database.Database): string[] {
+  const rows = db.prepare('SELECT path FROM files').all() as Array<{ path: string }>;
+  return rows.map(r => r.path);
+}
+
+export function deleteFileMetadata(db: Database.Database, path: string): void {
+  db.prepare('DELETE FROM files WHERE path = ?').run(path);
+}
+
 export function assertModelMatch(db: Database.Database, providerModelId: string): void {
   const row = db
     .prepare("SELECT value FROM index_metadata WHERE key = 'embedding_model_id'")

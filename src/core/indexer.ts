@@ -86,6 +86,42 @@ export async function indexFile(
   return { status: 'indexed', chunksCreated: chunks.length };
 }
 
+export async function indexFiles(
+  filePaths: string[],
+  config: Config,
+  db: Database.Database,
+  table: lancedb.Table,
+  embedder: EmbeddingProvider,
+): Promise<IndexResult> {
+  const result: IndexResult = {
+    filesIndexed: 0,
+    filesSkipped: 0,
+    filesFailed: 0,
+    chunksCreated: 0,
+    failedPaths: [],
+  };
+  for (const filePath of filePaths) {
+    let attempts = 0;
+    while (attempts < 2) {
+      attempts++;
+      try {
+        const fileResult = await indexFile(filePath, config, db, table, embedder);
+        if (fileResult.status === 'indexed') result.filesIndexed++;
+        else result.filesSkipped++;
+        result.chunksCreated += fileResult.chunksCreated;
+        break;
+      } catch (err) {
+        if (attempts >= 2) {
+          result.filesFailed++;
+          result.failedPaths.push(filePath);
+          logger.error(`Failed to index after ${attempts} attempts: ${filePath}`, err);
+        }
+      }
+    }
+  }
+  return result;
+}
+
 export async function indexVault(
   config: Config,
   db: Database.Database,
