@@ -51,7 +51,7 @@
 
 - [x] **EMB-01**: Pluggable embedding interface: `embed(texts: string[]): Promise<number[][]>`
 - [x] **EMB-02**: OpenAI text-embedding-3-small adapter ships as default
-- [ ] **EMB-03**: Ollama/nomic-embed-text adapter ships as local alternative
+- [x] **EMB-03**: Ollama/nomic-embed-text adapter ships as local alternative
 - [x] **EMB-04**: Switching embedding provider triggers full reindex warning (model fingerprint mismatch)
 
 ### File Watcher
@@ -129,7 +129,7 @@
 | CLI-05 | Phase 4 | Complete |
 | EMB-01 | Phase 1 | Complete |
 | EMB-02 | Phase 1 | Complete |
-| EMB-03 | Phase 6 | Pending |
+| EMB-03 | Phase 6 | Complete |
 | EMB-04 | Phase 1 | Complete |
 | WATCH-01 | Phase 5 | Complete |
 | WATCH-02 | Phase 5 | Complete |

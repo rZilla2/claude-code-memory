@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-04-06T14:52:26.996Z"
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-04-06T18:52:26.638Z"
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 14
-  completed_plans: 14
+  total_plans: 16
+  completed_plans: 15
 ---
 
 # Project State
@@ -19,11 +19,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-05)
 
 **Core value:** Semantic recall across the entire vault — find what's relevant by meaning, not keywords
-**Current focus:** Phase 05 — file-watcher-maintenance
+**Current focus:** Phase 06 — ollama-adapter-staleness-scoring
 
 ## Current Position
 
-Phase: 05 (file-watcher-maintenance) — EXECUTING
+Phase: 06 (ollama-adapter-staleness-scoring) — EXECUTING
 Plan: 1 of 2
 
 ## Performance Metrics
@@ -60,6 +60,7 @@ Plan: 1 of 2
 | Phase 04-consumer-surfaces P02 | 3 | 2 tasks | 7 files |
 | Phase 05-file-watcher-maintenance P01 | 20 | 2 tasks | 6 files |
 | Phase 05-file-watcher-maintenance P02 | 25 | 2 tasks | 8 files |
+| Phase 06-ollama-adapter-staleness-scoring P01 | 15 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -97,6 +98,8 @@ Recent decisions affecting current work:
 - [Phase 05-file-watcher-maintenance]: chokidar v4 watch() named export; processBatch exported for unit testing; startupCatchUp uses db.prepare() directly for indexed_at + content_hash in one query
 - [Phase 05-file-watcher-maintenance]: maybeAutoCompact is a standalone export shared by MCP server and mem watch
 - [Phase 05-file-watcher-maintenance]: MCP server watcher starts after warm-up, before server.connect(transport)
+- [Phase 06-ollama-adapter-staleness-scoring]: OllamaEmbeddingProvider batchSize default is 20 (not global config value) — local GPU throughput differs from OpenAI API
+- [Phase 06-ollama-adapter-staleness-scoring]: ECONNREFUSED mapped to user-friendly error mentioning 'ollama serve' and ollama.ai install URL
 
 ### Pending Todos
 
@@ -109,6 +112,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T14:49:03.111Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-04-06T18:52:26.637Z
+Stopped at: Completed 06-01-PLAN.md
 Resume file: None

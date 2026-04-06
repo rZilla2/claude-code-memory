@@ -105,7 +105,7 @@ Plans:
   1. Setting `embedding_provider: "ollama"` in config and running `mem index` completes with no OpenAI API calls made
   2. Switching from OpenAI to Ollama triggers a clear warning that a full reindex is required before proceeding
   3. A chunk from a note last modified 18 months ago scores measurably lower than an identical chunk from last week (staleness decay observable in score field)
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
 - [ ] 06-01-PLAN.md — Ollama embedding adapter with TDD, factory wiring, Config extension (EMB-03)
 - [ ] 06-02-PLAN.md — Staleness decay scoring in searcher, Config extension (SRCH-06, SRCH-07)
@@ -119,7 +119,7 @@ Plans:
 | 3. Query Pipeline | 2/2 | Complete   | 2026-04-05 |
 | 4. Consumer Surfaces | 3/3 | Complete   | 2026-04-06 |
 | 5. File Watcher + Maintenance | 2/2 | Complete   | 2026-04-06 |
-| 6. Ollama Adapter + Staleness Scoring | 0/2 | Planning complete | - |
+| 6. Ollama Adapter + Staleness Scoring | 1/2 | In Progress|  |
 
 ---
 *Created: 2026-04-05*
