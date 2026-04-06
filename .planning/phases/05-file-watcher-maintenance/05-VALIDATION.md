@@ -2,8 +2,8 @@
 phase: 05
 slug: file-watcher-maintenance
 status: draft
-nyquist_compliant: false
-wave_0_complete: false
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-04-06
 ---
 
@@ -27,36 +27,36 @@ created: 2026-04-06
 
 ## Sampling Rate
 
-- **After every task commit:** Run `npm test -- src/core/watcher.test.ts src/cli/commands/compact-cmd.test.ts src/cli/commands/prune-cmd.test.ts`
+- **After every task commit:** Run `npm test -- src/core/watcher.test.ts src/cli/commands/compact-cmd.test.ts src/cli/commands/prune-cmd.test.ts src/cli/commands/watch-cmd.test.ts`
 - **After every plan wave:** Run `npm test`
 - **Before `/gsd:verify-work`:** Full suite must be green
 - **Max feedback latency:** 15 seconds
 
 ---
 
-## Per-Task Verification Map
+## Wave 0 Satisfaction
 
-| Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
-|---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 05-01-01 | 01 | 1 | WATCH-01 | unit | `npm test -- src/core/watcher.test.ts` | ❌ W0 | ⬜ pending |
-| 05-01-02 | 01 | 1 | WATCH-02 | unit | `npm test -- src/core/watcher.test.ts` | ❌ W0 | ⬜ pending |
-| 05-01-03 | 01 | 1 | WATCH-03 | unit | `npm test -- src/core/watcher.test.ts` | ❌ W0 | ⬜ pending |
-| 05-01-04 | 01 | 1 | WATCH-04 | unit | `npm test -- src/core/watcher.test.ts` | ❌ W0 | ⬜ pending |
-| 05-02-01 | 02 | 2 | WATCH-05 | manual | N/A — requires live process | N/A | ⬜ pending |
-| 05-02-02 | 02 | 2 | MAINT-01 | unit | `npm test -- src/cli/commands/compact-cmd.test.ts` | ❌ W0 | ⬜ pending |
-| 05-02-03 | 02 | 2 | MAINT-02 | unit | `npm test -- src/cli/commands/prune-cmd.test.ts` | ❌ W0 | ⬜ pending |
+Wave 0 test stubs are satisfied by inline TDD ordering in the plans:
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+- **Plan 01 Task 2** (`tdd="true"`): Creates `src/core/watcher.test.ts` as its first action (tests before implementation). Covers WATCH-01 through WATCH-04.
+- **Plan 02 Task 1** (`tdd="true"`): Creates `src/cli/commands/compact-cmd.test.ts` and `src/cli/commands/prune-cmd.test.ts` as first action. Covers MAINT-01, MAINT-02.
+- **Plan 02 Task 2** (`tdd="true"`): Creates `src/cli/commands/watch-cmd.test.ts` as first action. Covers WATCH-05 startup logic.
+
+No separate Wave 0 plan is needed -- TDD tasks write test stubs before implementation within each task.
 
 ---
 
-## Wave 0 Requirements
+## Per-Task Verification Map
 
-- [ ] `src/core/watcher.test.ts` — stubs for WATCH-01 through WATCH-04 + startup compaction check
-- [ ] `src/cli/commands/compact-cmd.test.ts` — stubs for MAINT-01
-- [ ] `src/cli/commands/prune-cmd.test.ts` — stubs for MAINT-02
-- [ ] Install deps: `npm install chokidar@^4`
-- [ ] SQLite schema migration: `ensureCompactionMetadata()` added to `openMetadataDb()`
+| Task ID | Plan | Wave | Requirement | Test Type | Automated Command | Status |
+|---------|------|------|-------------|-----------|-------------------|--------|
+| 05-01-01 | 01 | 1 | WATCH-01 | unit | `npm test -- src/core/watcher.test.ts` | pending |
+| 05-01-02 | 01 | 1 | WATCH-02 | unit | `npm test -- src/core/watcher.test.ts` | pending |
+| 05-01-03 | 01 | 1 | WATCH-03 | unit | `npm test -- src/core/watcher.test.ts` | pending |
+| 05-01-04 | 01 | 1 | WATCH-04 | unit | `npm test -- src/core/watcher.test.ts` | pending |
+| 05-02-01 | 02 | 2 | WATCH-05 | unit+manual | `npm test -- src/cli/commands/watch-cmd.test.ts` | pending |
+| 05-02-02 | 02 | 2 | MAINT-01 | unit | `npm test -- src/cli/commands/compact-cmd.test.ts` | pending |
+| 05-02-03 | 02 | 2 | MAINT-02 | unit | `npm test -- src/cli/commands/prune-cmd.test.ts` | pending |
 
 ---
 
@@ -72,11 +72,11 @@ created: 2026-04-06
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 15s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or TDD-inline test creation
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covered by TDD task ordering (tests written first in each tdd="true" task)
+- [x] No watch-mode flags
+- [x] Feedback latency < 15s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** ready
