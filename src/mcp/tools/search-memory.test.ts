@@ -7,6 +7,11 @@ vi.mock('../../core/searcher.js', () => ({
   search: vi.fn(),
 }));
 
+// Mock lance db
+vi.mock('../../core/db/lance.js', () => ({
+  ensureFtsIndex: vi.fn(),
+}));
+
 // Mock logger
 vi.mock('../../logger.js', () => ({
   logger: {

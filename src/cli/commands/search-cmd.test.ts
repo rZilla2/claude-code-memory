@@ -8,6 +8,7 @@ vi.mock('../../config.js', () => ({
 vi.mock('../../core/db/lance.js', () => ({
   connectLanceDb: vi.fn(),
   openChunksTable: vi.fn(),
+  ensureFtsIndex: vi.fn(),
 }));
 
 vi.mock('../../core/embedder/factory.js', () => ({

@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { loadConfig } from '../../config.js';
-import { connectLanceDb, openChunksTable } from '../../core/db/lance.js';
+import { connectLanceDb, openChunksTable, ensureFtsIndex } from '../../core/db/lance.js';
 import { createEmbeddingProvider } from '../../core/embedder/factory.js';
 import { search } from '../../core/searcher.js';
 import { logger } from '../../logger.js';
@@ -40,6 +40,10 @@ export function registerSearchCommand(program: Command): void {
           const connection = await connectLanceDb(config.indexPath);
           const table = await openChunksTable(connection);
           const embedder = createEmbeddingProvider(config);
+
+          if (options.mode !== 'vector') {
+            await ensureFtsIndex(table);
+          }
 
           const searchOpts: SearchOptions = {
             topK: parseInt(options.limit, 10),

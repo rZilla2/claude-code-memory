@@ -2,6 +2,7 @@ import { z } from 'zod';
 import type * as lancedb from '@lancedb/lancedb';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { search } from '../../core/searcher.js';
+import { ensureFtsIndex } from '../../core/db/lance.js';
 import { logger } from '../../logger.js';
 import type { EmbeddingProvider } from '../../core/embedder/types.js';
 
@@ -40,6 +41,10 @@ export function registerSearchMemoryTool(
           ...(args.beforeDate ? { beforeDate: new Date(args.beforeDate) } : {}),
           ...(args.sourceGlob ? { sourceGlob: args.sourceGlob } : {}),
         };
+
+        if (options.mode !== 'vector') {
+          await ensureFtsIndex(table);
+        }
 
         const results = await search(args.query, table, embedder, options);
 

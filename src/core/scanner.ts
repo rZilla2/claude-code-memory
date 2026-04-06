@@ -1,4 +1,4 @@
-import { glob } from 'fast-glob';
+import fg from 'fast-glob';
 import type { Config } from '../types.js';
 
 export async function scanVault(config: Config): Promise<string[]> {
@@ -17,7 +17,7 @@ export async function scanVault(config: Config): Promise<string[]> {
     ...config.ignorePaths.map((p) => `**/${p}/**`),
   ];
 
-  return glob(extPattern, {
+  return fg(extPattern, {
     cwd: config.vaultPath,
     absolute: true,
     ignore,
