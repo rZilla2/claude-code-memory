@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A vector database-based semantic memory system for Claude Code that indexes an entire Obsidian vault. Replaces grep-based flat-file memory with meaning-based recall — enabling Claude Code to find relevant context by concept (not keyword), and giving the user fuzzy semantic search over their entire knowledge base via CLI. Designed to be shared as a clean open-source npm package.
+A vector database-based semantic memory system for Claude Code that indexes an entire Obsidian vault. Enables Claude Code to find relevant context by meaning (not keyword) via MCP, and gives the user fuzzy semantic search over their knowledge base via CLI. Ships as a single npm package.
 
 ## Core Value
 
@@ -12,58 +12,59 @@ Semantic recall across the entire vault — when Claude Code or Rod searches for
 
 ### Validated
 
-- [x] Index entire Obsidian vault (thousands of .md files) into vector embeddings — Validated in Phase 2: index-pipeline
-- [x] Intelligent markdown-aware chunking (by heading/section, not fixed token windows) — Validated in Phase 2: index-pipeline
-- [x] Content hashing to skip re-embedding unchanged files — Validated in Phase 2: index-pipeline
-- [x] Hybrid search: vector similarity + full-text keyword search — Validated in Phase 3: query-pipeline
+- ✓ Index entire Obsidian vault (thousands of .md files) into vector embeddings — v1.0
+- ✓ Intelligent markdown-aware chunking (by heading/section, not fixed token windows) — v1.0
+- ✓ Content hashing to skip re-embedding unchanged files — v1.0
+- ✓ Hybrid search: vector similarity + full-text keyword search with RRF — v1.0
+- ✓ MCP server so Claude Code can query memories semantically — v1.0
+- ✓ CLI for user to search from terminal (`mem search "calendar setup"`) — v1.0
+- ✓ Auto-reindex when vault files change (file watcher) — v1.0
+- ✓ Recency weighting and metadata filtering (date, source file) — v1.0
+- ✓ Staleness controls (confidence decay over time) — v1.0
+- ✓ Pluggable embedding provider (OpenAI + Ollama) — v1.0
+- ✓ Index stored outside iCloud to prevent sync corruption — v1.0
 
 ### Active
 
-- [x] MCP server so Claude Code can query memories semantically — Validated in Phase 4: consumer-surfaces
-- [x] CLI for user to search from terminal (`mem search "calendar setup"`) — Validated in Phase 4: consumer-surfaces
-- [x] Auto-reindex when vault files change (file watcher) — Validated in Phase 5: file-watcher-maintenance
-- [x] Recency weighting and metadata filtering (date, source file, tags) — Validated in Phase 6: ollama-adapter-staleness-scoring
-- [x] Staleness controls (confidence decay over time) — Validated in Phase 6: ollama-adapter-staleness-scoring
-- [x] Pluggable embedding provider (OpenAI default + Ollama adapter) — Validated in Phase 6: ollama-adapter-staleness-scoring
-- [ ] Index stored outside iCloud to prevent sync corruption
+_(None yet — define in next milestone)_
 
 ### Out of Scope
 
-- Obsidian plugin UI — deferred to future, CLI-first for v1
-- Mobile app — future consideration after core is solid
-- Auto-session-note generation from conversation monitoring — future feature, continue using /save-session-notes-rw2 for now
+- Obsidian plugin UI — deferred, CLI-first
+- Mobile app — future consideration
+- Auto-session-note generation from conversation monitoring — future
 - Multi-user / multi-tenant — single user only
 - Cloud-hosted vector DB — local-first, no cloud dependency
+- Non-markdown file indexing (PDF, images) — markdown-first
 
 ## Context
 
-- Rod's Obsidian vault lives at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Second Brain/` (iCloud-synced, path has spaces)
-- Current memory system: flat .md files in `~/.claude/projects/*/memory/` and session notes per project, searched via grep
-- Pain points: grep is keyword-exact (misses semantic matches), session notes tied to specific projects (cross-cutting context lost), files scattered everywhere
-- Inspired by Claude-Mem GitHub project approach
-- Second opinions from Codex and Gemini both validated the core stack with refinements
+Shipped v1.0 with 2,169 LOC TypeScript + 4,048 LOC tests (1.9x test-to-code ratio).
+Tech stack: TypeScript, LanceDB, better-sqlite3, remark/unified, chokidar v4, OpenAI/Ollama embeddings.
+Vault indexed: 1,079 files → 4,334 chunks with OpenAI text-embedding-3-small.
+MCP tools (`search_memory`, `get_context`) live in Claude Code.
 
 ## Constraints
 
-- **Local-first**: No cloud DB dependency. Vector index stored locally at `~/.claude-code-memory/`
+- **Local-first**: No cloud DB dependency. Vector index at `~/.claude-code-memory/`
 - **macOS**: Primary platform, must handle iCloud paths with spaces
-- **Open-source**: Clean GitHub repo with README, good organization, shareable as npm package
-- **Single package**: Ship as one `npm install`, not a multi-package monorepo
-- **Embedding cost**: OpenAI text-embedding-3-small keeps full vault indexing under $0.30
+- **Open-source**: Clean GitHub repo, shareable as npm package
+- **Single package**: One `npm install`, not monorepo
+- **Embedding cost**: Full vault indexing under $0.30 with OpenAI
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| LanceDB for vectors | Embedded, zero-ops, file-on-disk, Rust-based, good TS bindings. Both Codex and Gemini validated. | — Pending |
-| better-sqlite3 for metadata | File hashes, timestamps, staleness scores. Lighter than putting metadata in LanceDB. | — Pending |
-| OpenAI text-embedding-3-small as default | Best quality-to-cost ratio. Abstract behind interface for swappability. | — Pending |
-| TypeScript | MCP SDK is TS-native, matches Claude Code ecosystem, npm distribution natural. | — Pending |
-| Store index outside iCloud | iCloud sync can corrupt Lance format files. Vault is read-only input; index is derived data at ~/.claude-code-memory/ | — Pending |
-| Hybrid retrieval (vector + FTS) | Pure vector misses exact-match queries. LanceDB supports FTS natively. Merge with reciprocal rank fusion. | ✓ Validated Phase 3 |
-| remark/unified for chunking | Markdown AST parsing splits by heading section. Biggest quality lever for retrieval. | ✓ Validated Phase 2 |
-| chokidar v3 for file watching | v3.6.0 battle-tested on macOS FSEvents. v4 dropped platforms. Debounce 500ms+ for iCloud cascade events. | — Pending |
-| Pluggable embedding provider | Abstract with interface. Ship OpenAI + Ollama adapters. Prevents vendor lock-in for open-source users. | — Pending |
+| LanceDB for vectors | Embedded, zero-ops, file-on-disk, Rust-based | ✓ Good — 4,334 chunks, fast queries |
+| better-sqlite3 for metadata | File hashes, timestamps, lighter than LanceDB for metadata | ✓ Good |
+| OpenAI text-embedding-3-small default | Best quality-to-cost ratio, $0.25 for full vault | ✓ Good |
+| TypeScript | MCP SDK is TS-native, npm distribution natural | ✓ Good |
+| Index outside iCloud | Prevents sync corruption of Lance format files | ✓ Good |
+| Hybrid retrieval (vector + FTS + RRF) | Pure vector misses exact-match queries | ✓ Good — validated in live testing |
+| remark/unified for chunking | Markdown AST parsing splits by heading section | ✓ Good — biggest quality lever |
+| chokidar v4 for file watching | v4 ESM-native, batch window handles iCloud cascade | ✓ Good |
+| Pluggable embedding provider | OpenAI + Ollama, prevents vendor lock-in | ✓ Good |
 
 ---
-*Last updated: 2026-04-05 — Phase 3 (query-pipeline) complete*
+*Last updated: 2026-04-06 after v1.0 milestone*
