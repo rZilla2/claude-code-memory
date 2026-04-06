@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-04-06T14:35:11.752Z"
+stopped_at: "Checkpoint: Task 3 human-verify for 05-02-PLAN.md"
+last_updated: "2026-04-06T14:43:17.122Z"
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -59,6 +59,7 @@ Plan: 1 of 2
 | Phase 04-consumer-surfaces P03 | 12 | 2 tasks | 3 files |
 | Phase 04-consumer-surfaces P02 | 3 | 2 tasks | 7 files |
 | Phase 05-file-watcher-maintenance P01 | 20 | 2 tasks | 6 files |
+| Phase 05-file-watcher-maintenance P02 | 25 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -94,6 +95,8 @@ Recent decisions affecting current work:
 - [Phase 04-consumer-surfaces P02]: First-run auto-detect is non-blocking — returns bool, does not throw
 - [Phase 04-consumer-surfaces P02]: config set uses parseConfigValue for array fields (comma-split) and integers
 - [Phase 05-file-watcher-maintenance]: chokidar v4 watch() named export; processBatch exported for unit testing; startupCatchUp uses db.prepare() directly for indexed_at + content_hash in one query
+- [Phase 05-file-watcher-maintenance]: maybeAutoCompact is a standalone export shared by MCP server and mem watch
+- [Phase 05-file-watcher-maintenance]: MCP server watcher starts after warm-up, before server.connect(transport)
 
 ### Pending Todos
 
@@ -106,6 +109,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T14:35:06.428Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-04-06T14:43:02.065Z
+Stopped at: Checkpoint: Task 3 human-verify for 05-02-PLAN.md
 Resume file: None

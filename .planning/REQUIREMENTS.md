@@ -60,12 +60,12 @@
 - [x] **WATCH-02**: Debounce of 1000ms+ with awaitWriteFinish for iCloud sync stability
 - [x] **WATCH-03**: Changed files trigger incremental reindex (only affected chunks)
 - [x] **WATCH-04**: File renames detected and handled (update metadata, skip re-embedding if content unchanged)
-- [ ] **WATCH-05**: Watcher runs as background daemon or launchd service
+- [x] **WATCH-05**: Watcher runs as background daemon or launchd service
 
 ### Maintenance
 
-- [ ] **MAINT-01**: Periodic LanceDB `table.optimize()` to compact fragments from incremental updates
-- [ ] **MAINT-02**: `mem prune` command removes chunks from deleted source files
+- [x] **MAINT-01**: Periodic LanceDB `table.optimize()` to compact fragments from incremental updates
+- [x] **MAINT-02**: `mem prune` command removes chunks from deleted source files
 
 ## v2 Requirements
 
@@ -135,9 +135,9 @@
 | WATCH-02 | Phase 5 | Complete |
 | WATCH-03 | Phase 5 | Complete |
 | WATCH-04 | Phase 5 | Complete |
-| WATCH-05 | Phase 5 | Pending |
-| MAINT-01 | Phase 5 | Pending |
-| MAINT-02 | Phase 5 | Pending |
+| WATCH-05 | Phase 5 | Complete |
+| MAINT-01 | Phase 5 | Complete |
+| MAINT-02 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 37 total
