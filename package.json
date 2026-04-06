@@ -14,8 +14,8 @@
     }
   },
   "bin": {
-    "mem": "./dist/cli/index.cjs",
-    "mem-mcp": "./dist/mcp/index.cjs"
+    "mem": "./dist/cli/index.js",
+    "mem-mcp": "./dist/mcp/index.js"
   },
   "engines": {
     "node": ">=18"
