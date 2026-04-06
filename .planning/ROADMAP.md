@@ -92,7 +92,10 @@ Plans:
   3. Renaming a file updates its metadata in the index without re-embedding if content is unchanged
   4. `mem prune` removes all chunks whose source files no longer exist on disk
   5. After 500+ incremental updates, `mem status` reports no excessive fragment count (auto-compaction ran)
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 05-01-PLAN.md — Core watcher module with batch window, rename detection, catch-up scan (WATCH-01, WATCH-02, WATCH-03, WATCH-04)
+- [ ] 05-02-PLAN.md — CLI commands (watch/compact/prune) + MCP server watcher integration (WATCH-05, MAINT-01, MAINT-02)
 
 ### Phase 6: Ollama Adapter + Staleness Scoring
 **Goal**: Local/offline users can index without OpenAI, and old content is automatically deprioritized
@@ -112,7 +115,7 @@ Plans:
 | 2. Index Pipeline | 4/4 | Complete | 2026-04-05 |
 | 3. Query Pipeline | 2/2 | Complete   | 2026-04-05 |
 | 4. Consumer Surfaces | 3/3 | Complete   | 2026-04-06 |
-| 5. File Watcher + Maintenance | 0/0 | Not started | - |
+| 5. File Watcher + Maintenance | 0/2 | In Progress | - |
 | 6. Ollama Adapter + Staleness Scoring | 0/0 | Not started | - |
 
 ---
