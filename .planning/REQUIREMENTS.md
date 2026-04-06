@@ -56,10 +56,10 @@
 
 ### File Watcher
 
-- [ ] **WATCH-01**: File watcher detects markdown file changes in vault using chokidar v4
-- [ ] **WATCH-02**: Debounce of 1000ms+ with awaitWriteFinish for iCloud sync stability
-- [ ] **WATCH-03**: Changed files trigger incremental reindex (only affected chunks)
-- [ ] **WATCH-04**: File renames detected and handled (update metadata, skip re-embedding if content unchanged)
+- [x] **WATCH-01**: File watcher detects markdown file changes in vault using chokidar v4
+- [x] **WATCH-02**: Debounce of 1000ms+ with awaitWriteFinish for iCloud sync stability
+- [x] **WATCH-03**: Changed files trigger incremental reindex (only affected chunks)
+- [x] **WATCH-04**: File renames detected and handled (update metadata, skip re-embedding if content unchanged)
 - [ ] **WATCH-05**: Watcher runs as background daemon or launchd service
 
 ### Maintenance
@@ -131,10 +131,10 @@
 | EMB-02 | Phase 1 | Complete |
 | EMB-03 | Phase 6 | Pending |
 | EMB-04 | Phase 1 | Complete |
-| WATCH-01 | Phase 5 | Pending |
-| WATCH-02 | Phase 5 | Pending |
-| WATCH-03 | Phase 5 | Pending |
-| WATCH-04 | Phase 5 | Pending |
+| WATCH-01 | Phase 5 | Complete |
+| WATCH-02 | Phase 5 | Complete |
+| WATCH-03 | Phase 5 | Complete |
+| WATCH-04 | Phase 5 | Complete |
 | WATCH-05 | Phase 5 | Pending |
 | MAINT-01 | Phase 5 | Pending |
 | MAINT-02 | Phase 5 | Pending |
