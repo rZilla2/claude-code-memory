@@ -35,7 +35,7 @@
 ### MCP Server
 
 - [x] **MCP-01**: MCP server exposes `search_memory` tool for Claude Code to query semantically
-- [ ] **MCP-02**: MCP server exposes `get_context` tool for retrieving full chunk details by ID
+- [x] **MCP-02**: MCP server exposes `get_context` tool for retrieving full chunk details by ID
 - [x] **MCP-03**: MCP server uses stdio transport with strict stderr-only logging
 - [x] **MCP-04**: MCP server handles cold start gracefully (warm-up on first query if needed)
 
@@ -119,7 +119,7 @@
 | SRCH-06 | Phase 6 | Pending |
 | SRCH-07 | Phase 6 | Pending |
 | MCP-01 | Phase 4 | Complete |
-| MCP-02 | Phase 4 | Pending |
+| MCP-02 | Phase 4 | Complete |
 | MCP-03 | Phase 4 | Complete |
 | MCP-04 | Phase 4 | Complete |
 | CLI-01 | Phase 4 | Complete |

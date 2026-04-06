@@ -11,7 +11,7 @@
 - [x] **Phase 1: Foundation** - Config, DB clients, embedding interface, path safety (completed 2026-04-05)
 - [x] **Phase 2: Index Pipeline** - Scanner, AST chunker, bulk indexer with hash-gating (completed 2026-04-05)
 - [x] **Phase 3: Query Pipeline** - Hybrid search (vector + BM25), RRF merge, metadata filtering (completed 2026-04-05)
-- [ ] **Phase 4: Consumer Surfaces** - MCP server + CLI thin wrappers over core
+- [x] **Phase 4: Consumer Surfaces** - MCP server + CLI thin wrappers over core (completed 2026-04-06)
 - [ ] **Phase 5: File Watcher + Maintenance** - Incremental reindex, auto-compaction, pruning
 - [ ] **Phase 6: Ollama Adapter + Staleness Scoring** - Local embedding provider + recency decay
 
@@ -76,7 +76,7 @@ Plans:
   3. `mem search "query"` from the terminal prints top-N results with source file, heading path, and relevance score
   4. `npm install -g claude-code-memory` installs the `mem` binary and it runs without additional setup beyond config
   5. MCP server handles first query after cold start without timing out (warm-up completes before response is required)
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 - [ ] 04-01-PLAN.md — MCP server with search_memory tool, warm-up, stdio transport (MCP-01, MCP-03, MCP-04)
 - [ ] 04-02-PLAN.md — CLI search + config commands + first-run auto-detect (CLI-01, CLI-02, CLI-03, CLI-04, CLI-05)
@@ -111,7 +111,7 @@ Plans:
 | 1. Foundation | 3/3 | Complete   | 2026-04-05 |
 | 2. Index Pipeline | 4/4 | Complete | 2026-04-05 |
 | 3. Query Pipeline | 2/2 | Complete   | 2026-04-05 |
-| 4. Consumer Surfaces | 2/3 | In Progress|  |
+| 4. Consumer Surfaces | 3/3 | Complete   | 2026-04-06 |
 | 5. File Watcher + Maintenance | 0/0 | Not started | - |
 | 6. Ollama Adapter + Staleness Scoring | 0/0 | Not started | - |
 
