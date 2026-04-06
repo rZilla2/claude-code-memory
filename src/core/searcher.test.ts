@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { RecordBatch } from 'apache-arrow';
 
 // --- Mock @lancedb/lancedb (for RRFReranker via lancedb.rerankers) ---
@@ -26,7 +26,7 @@ vi.mock('../logger.js', () => ({
   },
 }));
 
-import { search } from './searcher.js';
+import { search, applyDecay } from './searcher.js';
 import type { SearchOptions } from '../types.js';
 import type { EmbeddingProvider } from './embedder/types.js';
 
@@ -340,5 +340,88 @@ describe('search()', () => {
       const [result] = await search('q', mockTable as never, mockEmbedder, { mode: 'vector' });
       expect(result.score).toBe(0.42);
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// applyDecay() tests
+// ---------------------------------------------------------------------------
+
+function makeResult(overrides: Partial<import('../types.js').SearchResult> = {}): import('../types.js').SearchResult {
+  return {
+    id: 'test-id',
+    sourcePath: 'vault/note.md',
+    headingPath: '# Title',
+    text: 'Sample text',
+    score: 1.0,
+    indexedAt: new Date('2026-04-06'),
+    ...overrides,
+  };
+}
+
+describe('applyDecay', () => {
+  const FROZEN_NOW = new Date('2026-04-06T00:00:00.000Z');
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(FROZEN_NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('returns scores unchanged when decayRate is 0', () => {
+    const results = [
+      makeResult({ score: 0.8, indexedAt: new Date('2026-01-01') }),
+      makeResult({ score: 0.8, indexedAt: new Date('2025-01-01') }),
+    ];
+    const decayed = applyDecay(results, 0);
+    expect(decayed[0].score).toBe(0.8);
+    expect(decayed[1].score).toBe(0.8);
+  });
+
+  it('chunk from 7 days ago scores higher than chunk from 548 days ago', () => {
+    const sevenDaysAgo = new Date(FROZEN_NOW.getTime() - 7 * 86_400_000);
+    const fiveFortyEightDaysAgo = new Date(FROZEN_NOW.getTime() - 548 * 86_400_000);
+    const results = [
+      makeResult({ score: 1.0, indexedAt: sevenDaysAgo }),
+      makeResult({ score: 1.0, indexedAt: fiveFortyEightDaysAgo }),
+    ];
+    const decayed = applyDecay(results, 0.003);
+    expect(decayed[0].score).toBeGreaterThan(decayed[1].score);
+  });
+
+  it('chunk from 548 days ago scores approximately 0.193 (exp(-0.003 * 548))', () => {
+    const fiveFortyEightDaysAgo = new Date(FROZEN_NOW.getTime() - 548 * 86_400_000);
+    const results = [makeResult({ score: 1.0, indexedAt: fiveFortyEightDaysAgo })];
+    const decayed = applyDecay(results, 0.003);
+    expect(decayed[0].score).toBeCloseTo(0.193, 2);
+  });
+
+  it('chunk from 7 days ago scores approximately 0.979 (exp(-0.003 * 7))', () => {
+    const sevenDaysAgo = new Date(FROZEN_NOW.getTime() - 7 * 86_400_000);
+    const results = [makeResult({ score: 1.0, indexedAt: sevenDaysAgo })];
+    const decayed = applyDecay(results, 0.003);
+    expect(decayed[0].score).toBeCloseTo(0.979, 2);
+  });
+
+  it('re-sorts results by decayed score (lower raw score wins after decay)', () => {
+    const sevenDaysAgo = new Date(FROZEN_NOW.getTime() - 7 * 86_400_000);
+    const threeSixtyFiveDaysAgo = new Date(FROZEN_NOW.getTime() - 365 * 86_400_000);
+    // A: score=0.5, 7 days old → ~0.5 * 0.979 = ~0.490
+    // B: score=0.6, 365 days old → ~0.6 * 0.334 = ~0.200
+    const resultA = makeResult({ id: 'A', score: 0.5, indexedAt: sevenDaysAgo });
+    const resultB = makeResult({ id: 'B', score: 0.6, indexedAt: threeSixtyFiveDaysAgo });
+    const decayed = applyDecay([resultA, resultB], 0.003);
+    expect(decayed[0].id).toBe('A');
+    expect(decayed[1].id).toBe('B');
+  });
+
+  it('caps multiplier at 1.0 for future indexedAt (no score boost)', () => {
+    const oneDayInFuture = new Date(FROZEN_NOW.getTime() + 86_400_000);
+    const results = [makeResult({ score: 1.0, indexedAt: oneDayInFuture })];
+    const decayed = applyDecay(results, 0.003);
+    expect(decayed[0].score).toBe(1.0);
   });
 });

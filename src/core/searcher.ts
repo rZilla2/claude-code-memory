@@ -3,6 +3,18 @@ import type { EmbeddingProvider } from './embedder/types.js';
 import type { SearchOptions, SearchResult } from '../types.js';
 
 const DEFAULT_TOP_K = 10;
+
+export function applyDecay(results: SearchResult[], decayRate: number): SearchResult[] {
+  if (decayRate === 0) return results;
+  const now = Date.now();
+  return results
+    .map((r) => {
+      const ageInDays = (now - r.indexedAt.getTime()) / 86_400_000;
+      const multiplier = ageInDays <= 0 ? 1.0 : Math.exp(-decayRate * ageInDays);
+      return { ...r, score: r.score * multiplier };
+    })
+    .sort((a, b) => b.score - a.score);
+}
 const RRF_OVERFETCH_MULTIPLIER = 3;
 const RESULT_COLUMNS = ['id', 'text', 'source_path', 'heading_path', 'indexed_at'];
 
