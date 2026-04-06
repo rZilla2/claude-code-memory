@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-01-PLAN.md
-last_updated: "2026-04-06T18:52:26.638Z"
+stopped_at: Completed 06-02-PLAN.md
+last_updated: "2026-04-06T18:53:05.841Z"
 progress:
   total_phases: 6
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 16
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State
@@ -61,6 +61,7 @@ Plan: 1 of 2
 | Phase 05-file-watcher-maintenance P01 | 20 | 2 tasks | 6 files |
 | Phase 05-file-watcher-maintenance P02 | 25 | 2 tasks | 8 files |
 | Phase 06-ollama-adapter-staleness-scoring P01 | 15 | 2 tasks | 6 files |
+| Phase 06-ollama-adapter-staleness-scoring P02 | 15 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,7 @@ Recent decisions affecting current work:
 - [Phase 05-file-watcher-maintenance]: MCP server watcher starts after warm-up, before server.connect(transport)
 - [Phase 06-ollama-adapter-staleness-scoring]: OllamaEmbeddingProvider batchSize default is 20 (not global config value) — local GPU throughput differs from OpenAI API
 - [Phase 06-ollama-adapter-staleness-scoring]: ECONNREFUSED mapped to user-friendly error mentioning 'ollama serve' and ollama.ai install URL
+- [Phase 06]: stalenessDecayRate defaults to 0 in SearchOptions for backward compat; callers opt-in via config.stalenessDecayRate
 
 ### Pending Todos
 
@@ -112,6 +114,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T18:52:26.637Z
-Stopped at: Completed 06-01-PLAN.md
+Last session: 2026-04-06T18:53:05.839Z
+Stopped at: Completed 06-02-PLAN.md
 Resume file: None
