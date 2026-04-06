@@ -19,8 +19,8 @@ Semantic recall across the entire vault — when Claude Code or Rod searches for
 
 ### Active
 
-- [ ] MCP server so Claude Code can query memories semantically
-- [ ] CLI for user to search from terminal (`mem search "calendar setup"`)
+- [x] MCP server so Claude Code can query memories semantically — Validated in Phase 4: consumer-surfaces
+- [x] CLI for user to search from terminal (`mem search "calendar setup"`) — Validated in Phase 4: consumer-surfaces
 - [ ] Auto-reindex when vault files change (file watcher)
 - [ ] Recency weighting and metadata filtering (date, source file, tags)
 - [ ] Staleness controls (confidence decay over time)
