@@ -5,6 +5,7 @@ import { connectLanceDb, openChunksTable } from '../core/db/lance.js';
 import { openMetadataDb } from '../core/db/sqlite.js';
 import { createEmbeddingProvider } from '../core/embedder/factory.js';
 import { registerSearchMemoryTool } from './tools/search-memory.js';
+import { registerGetContextTool } from './tools/get-context.js';
 import { logger } from '../logger.js';
 import type { Config } from '../types.js';
 
@@ -30,6 +31,7 @@ export async function startMcpServer(config: Config): Promise<void> {
   // Create MCP server and register tools
   const server = new McpServer({ name: 'claude-code-memory', version: '0.1.0' });
   registerSearchMemoryTool(server, table, embedder);
+  registerGetContextTool(server, table);
 
   // Connect stdio transport
   const transport = new StdioServerTransport();
