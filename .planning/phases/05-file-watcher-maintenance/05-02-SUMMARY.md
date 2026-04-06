@@ -42,6 +42,7 @@ metrics:
 |---|------|--------|-------|
 | 1 | Add compact, prune commands and auto-compact logic | 2d662e4 | compact-cmd.ts, compact-cmd.test.ts, prune-cmd.ts, prune-cmd.test.ts |
 | 2 | Wire watcher into MCP server, add mem watch CLI, register all commands | 3a16b64 | watch-cmd.ts, watch-cmd.test.ts, server.ts, cli/index.ts |
+| 3 | Verify complete file watcher system end-to-end | (human-verify) | — |
 
 ## What Was Built
 
@@ -70,9 +71,9 @@ After warm-up: `assertModelMatch` → `maybeAutoCompact` (non-fatal) → `startu
 
 None — plan executed exactly as written.
 
-## Checkpoint Pending
+## Checkpoint
 
-Task 3 (`checkpoint:human-verify`) is awaiting human end-to-end verification of the complete watcher system.
+Task 3 (`checkpoint:human-verify`) was approved by human — end-to-end verification of the complete watcher system passed.
 
 ## Self-Check
 
