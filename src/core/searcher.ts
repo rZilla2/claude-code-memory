@@ -49,14 +49,14 @@ export async function search(
   embedder: EmbeddingProvider,
   options: SearchOptions = {},
 ): Promise<SearchResult[]> {
-  const { topK = DEFAULT_TOP_K, mode = 'hybrid' } = options;
+  const { topK = DEFAULT_TOP_K, mode = 'hybrid', stalenessDecayRate = 0 } = options;
   const predicate = buildWherePredicate(options);
 
   if (mode === 'fts') {
     const q = table.search(query, 'fts').select(RESULT_COLUMNS).limit(topK);
     if (predicate) q.where(predicate);
     const rows = await q.toArray();
-    return rows.map(rowToResult);
+    return applyDecay(rows.map(rowToResult), stalenessDecayRate);
   }
 
   const queryVector = (await embedder.embed([query]))[0];
@@ -65,7 +65,7 @@ export async function search(
     const q = table.search(queryVector as lancedb.IntoVector).select(RESULT_COLUMNS).limit(topK);
     if (predicate) q.where(predicate);
     const rows = await q.toArray();
-    return rows.map(rowToResult);
+    return applyDecay(rows.map(rowToResult), stalenessDecayRate);
   }
 
   // Hybrid: parallel vector + FTS, merge with RRF
@@ -109,5 +109,5 @@ export async function search(
       indexedAt: new Date(Number(getField('indexed_at', i) ?? 0)),
     });
   }
-  return results;
+  return applyDecay(results, stalenessDecayRate);
 }

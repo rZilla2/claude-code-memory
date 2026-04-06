@@ -15,6 +15,7 @@ export const ConfigSchema = z.object({
   concurrency: z.number().default(2),
   ignorePaths: z.array(z.string()).default([]),
   includeExtensions: z.array(z.string()).default(['.md']),
+  stalenessDecayRate: z.number().default(0.003),
 });
 
 export function assertPathSafety(indexPath: string): void {
