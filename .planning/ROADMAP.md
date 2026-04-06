@@ -76,7 +76,11 @@ Plans:
   3. `mem search "query"` from the terminal prints top-N results with source file, heading path, and relevance score
   4. `npm install -g claude-code-memory` installs the `mem` binary and it runs without additional setup beyond config
   5. MCP server handles first query after cold start without timing out (warm-up completes before response is required)
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 04-01-PLAN.md — MCP server with search_memory tool, warm-up, stdio transport (MCP-01, MCP-03, MCP-04)
+- [ ] 04-02-PLAN.md — CLI search + config commands + first-run auto-detect (CLI-01, CLI-02, CLI-03, CLI-04, CLI-05)
+- [ ] 04-03-PLAN.md — MCP get_context tool with neighbor finding (MCP-02)
 
 ### Phase 5: File Watcher + Maintenance
 **Goal**: Index stays current automatically and stays healthy under incremental update load
@@ -107,7 +111,7 @@ Plans:
 | 1. Foundation | 3/3 | Complete   | 2026-04-05 |
 | 2. Index Pipeline | 4/4 | Complete | 2026-04-05 |
 | 3. Query Pipeline | 2/2 | Complete   | 2026-04-05 |
-| 4. Consumer Surfaces | 0/0 | Not started | - |
+| 4. Consumer Surfaces | 0/3 | In progress | - |
 | 5. File Watcher + Maintenance | 0/0 | Not started | - |
 | 6. Ollama Adapter + Staleness Scoring | 0/0 | Not started | - |
 
