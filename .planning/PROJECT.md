@@ -26,7 +26,17 @@ Semantic recall across the entire vault — when Claude Code or Rod searches for
 
 ### Active
 
-_(None yet — define in next milestone)_
+_See REQUIREMENTS.md for v1.1 Baseline Fixes_
+
+## Current Milestone: v1.1 Baseline Fixes
+
+**Goal:** Fix known issues from v1.0 sprint, validate Ollama end-to-end, and prepare for open-source release.
+
+**Target fixes:**
+- Large file chunking (YouTube transcripts exceeding embedding token limit)
+- Ollama full reindex end-to-end validation
+- Package version bump and GitHub repo setup
+- Test coverage audit
 
 ### Out of Scope
 
@@ -67,4 +77,4 @@ MCP tools (`search_memory`, `get_context`) live in Claude Code.
 | Pluggable embedding provider | OpenAI + Ollama, prevents vendor lock-in | ✓ Good |
 
 ---
-*Last updated: 2026-04-06 after v1.0 milestone*
+*Last updated: 2026-04-06 after v1.1 milestone start*
