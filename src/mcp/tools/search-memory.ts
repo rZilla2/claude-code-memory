@@ -73,6 +73,7 @@ export function registerSearchMemoryTool(
               type: 'text' as const,
               text: JSON.stringify(
                 results.map((r) => ({
+                  id: r.id,
                   sourcePath: r.sourcePath,
                   headingPath: r.headingPath,
                   text: r.text,

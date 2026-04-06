@@ -116,6 +116,7 @@ describe('registerSearchMemoryTool', () => {
     const parsed = JSON.parse(result.content[0].text);
     expect(Array.isArray(parsed)).toBe(true);
     expect(parsed[0]).toMatchObject({
+      id: 'chunk-1',
       sourcePath: '20 - Journal/2026-04-01.md',
       headingPath: 'Daily Notes > Morning',
       text: 'Worked on claude-code-memory project',
