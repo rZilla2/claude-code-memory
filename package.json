@@ -14,7 +14,8 @@
     }
   },
   "bin": {
-    "mem": "./dist/cli/index.cjs"
+    "mem": "./dist/cli/index.cjs",
+    "mem-mcp": "./dist/mcp/index.cjs"
   },
   "engines": {
     "node": ">=18"
@@ -30,12 +31,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@inquirer/prompts": "^8.3.2",
     "@lancedb/lancedb": "^0.27.2",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "commander": "^14.0.3",
     "better-sqlite3": "^12.8.0",
     "fast-glob": "^3.3.3",
     "mdast-util-to-string": "^4.0.0",
     "openai": "^6.33.0",
     "p-limit": "^7.3.0",
+    "picocolors": "^1.1.1",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
@@ -46,7 +51,6 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^25.5.2",
     "@vitest/coverage-v8": "^4.1.2",
-    "commander": "^14.0.3",
     "eslint": "^10.2.0",
     "prettier": "^3.8.1",
     "tsup": "^8.5.1",
