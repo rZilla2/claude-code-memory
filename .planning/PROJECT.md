@@ -22,9 +22,9 @@ Semantic recall across the entire vault — when Claude Code or Rod searches for
 - [x] MCP server so Claude Code can query memories semantically — Validated in Phase 4: consumer-surfaces
 - [x] CLI for user to search from terminal (`mem search "calendar setup"`) — Validated in Phase 4: consumer-surfaces
 - [x] Auto-reindex when vault files change (file watcher) — Validated in Phase 5: file-watcher-maintenance
-- [ ] Recency weighting and metadata filtering (date, source file, tags)
-- [ ] Staleness controls (confidence decay over time)
-- [ ] Pluggable embedding provider (OpenAI default + Ollama adapter)
+- [x] Recency weighting and metadata filtering (date, source file, tags) — Validated in Phase 6: ollama-adapter-staleness-scoring
+- [x] Staleness controls (confidence decay over time) — Validated in Phase 6: ollama-adapter-staleness-scoring
+- [x] Pluggable embedding provider (OpenAI default + Ollama adapter) — Validated in Phase 6: ollama-adapter-staleness-scoring
 - [ ] Index stored outside iCloud to prevent sync corruption
 
 ### Out of Scope
