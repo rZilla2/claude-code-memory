@@ -41,11 +41,11 @@
 
 ### CLI
 
-- [ ] **CLI-01**: `mem search "<query>"` returns top-N results with source, heading, and relevance score
-- [ ] **CLI-02**: `mem index` runs full or incremental reindex
-- [ ] **CLI-03**: `mem status` shows index health (file count, chunk count, last indexed, embedding model)
-- [ ] **CLI-04**: `mem config` shows or sets configuration values
-- [ ] **CLI-05**: CLI is installed globally via `npm install -g claude-code-memory`
+- [x] **CLI-01**: `mem search "<query>"` returns top-N results with source, heading, and relevance score
+- [x] **CLI-02**: `mem index` runs full or incremental reindex
+- [x] **CLI-03**: `mem status` shows index health (file count, chunk count, last indexed, embedding model)
+- [x] **CLI-04**: `mem config` shows or sets configuration values
+- [x] **CLI-05**: CLI is installed globally via `npm install -g claude-code-memory`
 
 ### Embedding Providers
 
@@ -122,11 +122,11 @@
 | MCP-02 | Phase 4 | Pending |
 | MCP-03 | Phase 4 | Complete |
 | MCP-04 | Phase 4 | Complete |
-| CLI-01 | Phase 4 | Pending |
-| CLI-02 | Phase 4 | Pending |
-| CLI-03 | Phase 4 | Pending |
-| CLI-04 | Phase 4 | Pending |
-| CLI-05 | Phase 4 | Pending |
+| CLI-01 | Phase 4 | Complete |
+| CLI-02 | Phase 4 | Complete |
+| CLI-03 | Phase 4 | Complete |
+| CLI-04 | Phase 4 | Complete |
+| CLI-05 | Phase 4 | Complete |
 | EMB-01 | Phase 1 | Complete |
 | EMB-02 | Phase 1 | Complete |
 | EMB-03 | Phase 6 | Pending |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-consumer-surfaces-04-01-PLAN.md
-last_updated: "2026-04-06T13:11:45.131Z"
+stopped_at: Completed 04-consumer-surfaces-04-02-PLAN.md
+last_updated: "2026-04-06T13:16:10.000Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 12
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-04-05)
 ## Current Position
 
 Phase: 04 (consumer-surfaces) — EXECUTING
-Plan: 1 of 3
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -56,6 +56,7 @@ Plan: 1 of 3
 | Phase 03-query-pipeline P01 | 5 | 2 tasks | 5 files |
 | Phase 03-query-pipeline P02 | 2 | 2 tasks | 1 files |
 | Phase 04-consumer-surfaces P01 | 10 | 2 tasks | 6 files |
+| Phase 04-consumer-surfaces P02 | 3 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,9 @@ Recent decisions affecting current work:
 - [Phase 03-query-pipeline P02]: RRF _relevance_score field name confirmed correct by real runtime; BigInt WHERE predicate works as plain JS number; no searcher.ts changes needed
 - [Phase 04-consumer-surfaces]: commander moved to dependencies (runtime dep for CLI binary)
 - [Phase 04-consumer-surfaces]: Warm-up non-fatal try/catch — server starts even if LanceDB index is empty
+- [Phase 04-consumer-surfaces P02]: Commander --no-color sets options.color = false — checked via options.color !== false
+- [Phase 04-consumer-surfaces P02]: First-run auto-detect is non-blocking — returns bool, does not throw
+- [Phase 04-consumer-surfaces P02]: config set uses parseConfigValue for array fields (comma-split) and integers
 
 ### Pending Todos
 
@@ -98,6 +102,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T13:11:45.129Z
-Stopped at: Completed 04-consumer-surfaces-04-01-PLAN.md
+Last session: 2026-04-06T13:16:10.000Z
+Stopped at: Completed 04-consumer-surfaces-04-02-PLAN.md
 Resume file: None
