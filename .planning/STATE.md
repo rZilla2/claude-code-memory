@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Phase 4 context gathered
-last_updated: "2026-04-06T12:48:19.628Z"
+stopped_at: Completed 04-consumer-surfaces-04-01-PLAN.md
+last_updated: "2026-04-06T13:11:45.131Z"
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 12
+  completed_plans: 10
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-05)
 
 **Core value:** Semantic recall across the entire vault — find what's relevant by meaning, not keywords
-**Current focus:** Phase 03 — query-pipeline
+**Current focus:** Phase 04 — consumer-surfaces
 
 ## Current Position
 
-Phase: 03 (query-pipeline) — COMPLETE
-Plan: 2 of 2 (complete)
+Phase: 04 (consumer-surfaces) — EXECUTING
+Plan: 1 of 3
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Plan: 2 of 2 (complete)
 | Phase 02-index-pipeline P04 | 12 | 2 tasks | 5 files |
 | Phase 03-query-pipeline P01 | 5 | 2 tasks | 5 files |
 | Phase 03-query-pipeline P02 | 2 | 2 tasks | 1 files |
+| Phase 04-consumer-surfaces P01 | 10 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,8 @@ Recent decisions affecting current work:
 - [Phase 03-query-pipeline]: RRFReranker imported via lancedb.rerankers (not subpath — not in exports map)
 - [Phase 03-query-pipeline]: Arrow Schema field lookup via schema.fields.findIndex (not schema.fieldIndex — does not exist)
 - [Phase 03-query-pipeline P02]: RRF _relevance_score field name confirmed correct by real runtime; BigInt WHERE predicate works as plain JS number; no searcher.ts changes needed
+- [Phase 04-consumer-surfaces]: commander moved to dependencies (runtime dep for CLI binary)
+- [Phase 04-consumer-surfaces]: Warm-up non-fatal try/catch — server starts even if LanceDB index is empty
 
 ### Pending Todos
 
@@ -95,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T12:48:19.620Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-consumer-surfaces/04-CONTEXT.md
+Last session: 2026-04-06T13:11:45.129Z
+Stopped at: Completed 04-consumer-surfaces-04-01-PLAN.md
+Resume file: None

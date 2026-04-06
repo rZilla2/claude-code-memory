@@ -34,10 +34,10 @@
 
 ### MCP Server
 
-- [ ] **MCP-01**: MCP server exposes `search_memory` tool for Claude Code to query semantically
+- [x] **MCP-01**: MCP server exposes `search_memory` tool for Claude Code to query semantically
 - [ ] **MCP-02**: MCP server exposes `get_context` tool for retrieving full chunk details by ID
-- [ ] **MCP-03**: MCP server uses stdio transport with strict stderr-only logging
-- [ ] **MCP-04**: MCP server handles cold start gracefully (warm-up on first query if needed)
+- [x] **MCP-03**: MCP server uses stdio transport with strict stderr-only logging
+- [x] **MCP-04**: MCP server handles cold start gracefully (warm-up on first query if needed)
 
 ### CLI
 
@@ -118,10 +118,10 @@
 | SRCH-05 | Phase 3 | Complete |
 | SRCH-06 | Phase 6 | Pending |
 | SRCH-07 | Phase 6 | Pending |
-| MCP-01 | Phase 4 | Pending |
+| MCP-01 | Phase 4 | Complete |
 | MCP-02 | Phase 4 | Pending |
-| MCP-03 | Phase 4 | Pending |
-| MCP-04 | Phase 4 | Pending |
+| MCP-03 | Phase 4 | Complete |
+| MCP-04 | Phase 4 | Complete |
 | CLI-01 | Phase 4 | Pending |
 | CLI-02 | Phase 4 | Pending |
 | CLI-03 | Phase 4 | Pending |
