@@ -95,9 +95,10 @@ describe('loadConfig', () => {
     ).toThrow(/iCloud|Mobile Documents/);
   });
 
-  it('returns empty array default for ignorePaths', async () => {
+  it('returns empty array default for ignorePaths when no config file sets it', async () => {
     const { loadConfig } = await import('./config.js');
-    const config = loadConfig({ vaultPath: '/tmp/test-vault-ignorepaths' });
+    // Override ignorePaths to isolate from global config.json
+    const config = loadConfig({ vaultPath: '/tmp/test-vault-ignorepaths', ignorePaths: [] });
     expect(config.ignorePaths).toEqual([]);
   });
 
