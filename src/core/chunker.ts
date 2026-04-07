@@ -94,17 +94,24 @@ function flushChunks(
     }];
   }
 
-  // Sub-split by paragraph, preserving heading breadcrumb
-  const paragraphs = bodyText.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+  // Sub-split by paragraph (double-newline), then by line (single-newline) as fallback
+  let segments = bodyText.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+
+  // If double-newline split produced segments still over budget, re-split by single newline
+  const bodyTokenBudget = maxTokens - breadcrumbOverhead;
+  const needsLineSplit = segments.some(s => estimateTokens(s) > bodyTokenBudget);
+  if (needsLineSplit) {
+    segments = bodyText.split(/\n/).map(p => p.trim()).filter(Boolean);
+  }
+
   const chunks: Chunk[] = [];
   let currentParts: string[] = [];
   let subIndex = 1;
-
-  const bodyTokenBudget = maxTokens - breadcrumbOverhead;
+  const joinStr = needsLineSplit ? '\n' : '\n\n';
 
   const flushSub = () => {
     if (currentParts.length === 0) return;
-    const text = currentParts.join('\n\n');
+    const text = currentParts.join(joinStr);
     const subPath = `${headingPath}:${subIndex}`;
     const baseId = `${relativePath}::${subPath}`;
     const count = seenIds.get(baseId) ?? 0;
@@ -122,12 +129,12 @@ function flushChunks(
     currentParts = [];
   };
 
-  for (const para of paragraphs) {
-    const prospective = [...currentParts, para].join('\n\n');
+  for (const seg of segments) {
+    const prospective = [...currentParts, seg].join(joinStr);
     if (currentParts.length > 0 && estimateTokens(prospective) > bodyTokenBudget) {
       flushSub();
     }
-    currentParts.push(para);
+    currentParts.push(seg);
   }
   flushSub();
 
