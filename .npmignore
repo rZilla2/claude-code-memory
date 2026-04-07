@@ -1,0 +1,12 @@
+.planning/
+.scratch/
+.claude/
+coverage/
+src/
+*.test.ts
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+.eslintrc*
+eslint.config.*
+.prettierrc*

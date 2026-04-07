@@ -127,16 +127,21 @@ Uses `text-embedding-3-small` (1,536 dimensions). Set `OPENAI_API_KEY` env var.
 ### Ollama (local, free)
 
 ```bash
-# Install Ollama
+# Install and start Ollama
 brew install ollama
-ollama pull nomic-embed-text
+ollama serve              # Start the server (runs on localhost:11434)
+ollama pull nomic-embed-text  # Download the embedding model (~274MB)
 
 # Switch provider
 mem config set embeddingProvider ollama
 mem index   # Full reindex required when switching providers
 ```
 
-Uses `nomic-embed-text` (768 dimensions). No API key needed.
+Uses `nomic-embed-text` (768 dimensions). No API key needed. Ollama must be running (`ollama serve`) before indexing or searching.
+
+For MCP setup with Ollama, no `OPENAI_API_KEY` env var is needed — just omit it from your `~/.claude.json` config.
+
+**Switching between providers:** Changing the embedding provider requires a full reindex (`mem index`) because vector dimensions differ between models. The system detects model mismatches automatically and warns you.
 
 ## Configuration
 
@@ -199,13 +204,13 @@ src/
 ## Development
 
 ```bash
-git clone https://github.com/yourusername/claude-code-memory
+git clone https://github.com/rZilla2/claude-code-memory
 cd claude-code-memory
 npm install
-npm test          # 173 tests across 23 files
+npm test          # 178 tests across 23 files
 npm run build     # ESM + CJS + DTS via tsup
 ```
 
 ## License
 
-ISC
+MIT
