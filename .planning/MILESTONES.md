@@ -27,3 +27,21 @@
 - Ollama full reindex not yet tested end-to-end (adapter built and unit tested)
 
 ---
+
+## v1.1 Baseline Fixes (Shipped: 2026-04-06)
+
+**Phases:** 2 | **Plans:** 6 | **Tests:** 178 | **Coverage:** 81.69%
+**Git range:** c75a804..5c75387
+
+**Key accomplishments:**
+
+1. Large section sub-chunking — heading sections exceeding maxTokens now split by paragraph
+2. LanceDB deprecation warnings eliminated (`_distance`, `_score` in select columns)
+3. Ollama integration tests and model mismatch verification
+4. `search_memory` returns chunk IDs for `get_context` lookup (was missing)
+5. DTS build fix (`ignoreDeprecations: "6.0"`)
+6. Open-source release — MIT license, npm package fields, README, GitHub repo
+
+**Repo:** https://github.com/rZilla2/claude-code-memory
+
+---
