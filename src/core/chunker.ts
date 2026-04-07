@@ -19,6 +19,29 @@ function sha256(text: string): string {
   return createHash('sha256').update(text, 'utf-8').digest('hex');
 }
 
+/**
+ * Extract text from an AST node, preserving structure for lists and blockquotes.
+ * mdastToString concatenates children without separators — this adds newlines.
+ */
+function nodeToText(node: RootContent): string {
+  if (node.type === 'list') {
+    return (node as { children: RootContent[] }).children
+      .map(child => mdastToString(child))
+      .join('\n');
+  }
+  if (node.type === 'blockquote') {
+    return (node as { children: RootContent[] }).children
+      .map(child => {
+        const text = nodeToText(child as RootContent);
+        // Strip Obsidian callout syntax: [!note], [!tip], [!warning], etc.
+        return text.replace(/^\[![\w-]+\]\s*/, '');
+      })
+      .filter(Boolean)
+      .join('\n');
+  }
+  return mdastToString(node);
+}
+
 function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
@@ -48,7 +71,7 @@ function flushChunks(
 ): Chunk[] {
   if (bodyNodes.length === 0) return [];
 
-  const bodyText = bodyNodes.map(node => mdastToString(node)).join('\n\n').trim();
+  const bodyText = bodyNodes.map(node => nodeToText(node)).join('\n\n').trim();
   if (!bodyText) return [];
 
   const breadcrumb = headingPath === '(root)' ? '' : headingPath;
@@ -219,7 +242,7 @@ export function chunkMarkdown(
     chunks.push(...flushChunks(bodyNodes, currentPath, relativePath, seenIds, maxTokens));
   } else {
     // No headings at all — handle as special case
-    const fullText = bodyNodes.map(node => mdastToString(node)).join('\n\n').trim();
+    const fullText = bodyNodes.map(node => nodeToText(node)).join('\n\n').trim();
 
     if (!fullText) return [];
 

@@ -208,4 +208,43 @@ describe('chunkMarkdown', () => {
     const bigChunks = chunkMarkdown(md, 'test.md', 500);
     expect(bigChunks).toHaveLength(1);
   });
+
+  it('Obsidian callout blocks: strips [!type] syntax and preserves list item separation', () => {
+    const md = `# Notes
+
+## Games
+
+- [ ] do stuff
+
+> [!note] Games to play
+> - [ ] kingdoms of the dump
+> - [ ] neva
+> - [ ] hades
+
+## Other
+
+More content.
+`;
+    const chunks = chunkMarkdown(md, 'test.md');
+    const gamesChunk = chunks.find(c => c.headingPath === '# Notes > ## Games');
+    expect(gamesChunk).toBeDefined();
+    // [!note] should be stripped
+    expect(gamesChunk!.embeddableText).not.toContain('[!note]');
+    // Callout title preserved
+    expect(gamesChunk!.embeddableText).toContain('Games to play');
+    // List items separated by newlines, not smooshed
+    expect(gamesChunk!.embeddableText).toContain('kingdoms of the dump\nneva\nhades');
+  });
+
+  it('list items are separated by newlines in plain lists', () => {
+    const md = `# Section
+
+- item one
+- item two
+- item three
+`;
+    const chunks = chunkMarkdown(md, 'test.md');
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0].embeddableText).toContain('item one\nitem two\nitem three');
+  });
 });

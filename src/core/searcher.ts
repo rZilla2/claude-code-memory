@@ -33,7 +33,12 @@ function buildWherePredicate(options: SearchOptions): string | undefined {
     if (!/^[a-zA-Z0-9 /_.*%-]+$/.test(options.sourceGlob)) {
       throw new Error(`Invalid sourceGlob: contains unsafe characters`);
     }
-    conditions.push(`source_path LIKE '${sanitizeLanceFilter(options.sourceGlob)}'`);
+    // Convert glob to SQL LIKE: ** → %, * → %, ? → _
+    const likePattern = options.sourceGlob
+      .replace(/\*\*/g, '%')
+      .replace(/\*/g, '%')
+      .replace(/\?/g, '_');
+    conditions.push(`source_path LIKE '${sanitizeLanceFilter(likePattern)}'`);
   }
   return conditions.length > 0 ? conditions.join(' AND ') : undefined;
 }

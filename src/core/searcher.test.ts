@@ -307,6 +307,15 @@ describe('search()', () => {
       );
     });
 
+    it('converts glob wildcards to SQL LIKE patterns', async () => {
+      const qb = makeQueryBuilder();
+      mockTable.search.mockReturnValue(qb);
+      await search('q', mockTable as never, mockEmbedder, { mode: 'fts', sourceGlob: '**/2026-04-06*' });
+      expect(qb.where).toHaveBeenCalledWith(
+        expect.stringContaining("source_path LIKE '%/2026-04-06%'"),
+      );
+    });
+
     it('combines sourceGlob and afterDate in a single predicate', async () => {
       const qb = makeQueryBuilder();
       mockTable.search.mockReturnValue(qb);
