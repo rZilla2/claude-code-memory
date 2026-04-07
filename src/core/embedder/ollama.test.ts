@@ -88,4 +88,37 @@ describe('OllamaEmbeddingProvider', () => {
 
     await expect(provider.embed(['test'])).rejects.toThrow(/500/);
   });
+
+  it('full embed cycle: multiple texts produce correct dimensionality vectors', async () => {
+    const dims = 768; // nomic-embed-text dimension
+    const provider = new OllamaEmbeddingProvider();
+    const texts = ['first document about coding', 'second document about cooking', 'third document about music'];
+
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        embeddings: texts.map(() => Array.from({ length: dims }, () => Math.random())),
+      }),
+    });
+
+    const vectors = await provider.embed(texts);
+
+    expect(vectors).toHaveLength(3);
+    for (const vec of vectors) {
+      expect(vec).toHaveLength(dims);
+      expect(vec.every(v => typeof v === 'number')).toBe(true);
+    }
+  });
+
+  it('custom baseUrl is used in fetch calls', async () => {
+    const provider = new OllamaEmbeddingProvider('nomic-embed-text', 'http://myhost:9999');
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ embeddings: [[0.1]] }),
+    });
+
+    await provider.embed(['test']);
+
+    expect(fetchMock.mock.calls[0][0]).toBe('http://myhost:9999/api/embed');
+  });
 });

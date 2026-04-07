@@ -36,36 +36,79 @@ function buildBreadcrumb(stack: (string | undefined)[]): string {
 }
 
 /**
- * Flush accumulated body nodes into a Chunk.
- * Returns null if there are no body nodes (nothing to flush).
+ * Flush accumulated body nodes into one or more Chunks.
+ * If the section exceeds maxTokens, sub-splits by paragraph while preserving heading breadcrumb.
  */
-function flushChunk(
+function flushChunks(
   bodyNodes: RootContent[],
   headingPath: string,
   relativePath: string,
-  seenIds: Map<string, number>
-): Chunk | null {
-  if (bodyNodes.length === 0) return null;
+  seenIds: Map<string, number>,
+  maxTokens: number
+): Chunk[] {
+  if (bodyNodes.length === 0) return [];
 
   const bodyText = bodyNodes.map(node => mdastToString(node)).join('\n\n').trim();
-  if (!bodyText) return null;
+  if (!bodyText) return [];
 
-  const baseId = `${relativePath}::${headingPath}`;
-  const count = seenIds.get(baseId) ?? 0;
-  seenIds.set(baseId, count + 1);
+  const breadcrumb = headingPath === '(root)' ? '' : headingPath;
+  const breadcrumbOverhead = breadcrumb ? estimateTokens(breadcrumb + '\n\n') : 0;
 
-  const id = count === 0 ? baseId : `${baseId}-${count + 1}`;
+  // If within limit, return single chunk
+  if (estimateTokens(bodyText) + breadcrumbOverhead <= maxTokens) {
+    const baseId = `${relativePath}::${headingPath}`;
+    const count = seenIds.get(baseId) ?? 0;
+    seenIds.set(baseId, count + 1);
+    const id = count === 0 ? baseId : `${baseId}-${count + 1}`;
 
-  const embeddableText = headingPath === '(root)'
-    ? bodyText
-    : `${headingPath}\n\n${bodyText}`;
+    const embeddableText = breadcrumb ? `${breadcrumb}\n\n${bodyText}` : bodyText;
 
-  return {
-    id,
-    headingPath,
-    embeddableText,
-    chunkHash: sha256(embeddableText),
+    return [{
+      id,
+      headingPath,
+      embeddableText,
+      chunkHash: sha256(embeddableText),
+    }];
+  }
+
+  // Sub-split by paragraph, preserving heading breadcrumb
+  const paragraphs = bodyText.split(/\n\n+/).map(p => p.trim()).filter(Boolean);
+  const chunks: Chunk[] = [];
+  let currentParts: string[] = [];
+  let subIndex = 1;
+
+  const bodyTokenBudget = maxTokens - breadcrumbOverhead;
+
+  const flushSub = () => {
+    if (currentParts.length === 0) return;
+    const text = currentParts.join('\n\n');
+    const subPath = `${headingPath}:${subIndex}`;
+    const baseId = `${relativePath}::${subPath}`;
+    const count = seenIds.get(baseId) ?? 0;
+    seenIds.set(baseId, count + 1);
+    const id = count === 0 ? baseId : `${baseId}-${count + 1}`;
+
+    const embeddableText = breadcrumb ? `${breadcrumb}\n\n${text}` : text;
+    chunks.push({
+      id,
+      headingPath: subPath,
+      embeddableText,
+      chunkHash: sha256(embeddableText),
+    });
+    subIndex++;
+    currentParts = [];
   };
+
+  for (const para of paragraphs) {
+    const prospective = [...currentParts, para].join('\n\n');
+    if (currentParts.length > 0 && estimateTokens(prospective) > bodyTokenBudget) {
+      flushSub();
+    }
+    currentParts.push(para);
+  }
+  flushSub();
+
+  return chunks;
 }
 
 /**
@@ -146,8 +189,7 @@ export function chunkMarkdown(
         const currentPath = buildBreadcrumb(headingStack);
         const headingPath = currentPath || '(root)';
 
-        const chunk = flushChunk(bodyNodes, headingPath, relativePath, seenIds);
-        if (chunk) chunks.push(chunk);
+        chunks.push(...flushChunks(bodyNodes, headingPath, relativePath, seenIds, maxTokens));
         bodyNodes = [];
 
         // Update heading stack
@@ -174,8 +216,7 @@ export function chunkMarkdown(
   // Flush remaining body nodes
   if (hasAnyHeading) {
     const currentPath = buildBreadcrumb(headingStack);
-    const chunk = flushChunk(bodyNodes, currentPath, relativePath, seenIds);
-    if (chunk) chunks.push(chunk);
+    chunks.push(...flushChunks(bodyNodes, currentPath, relativePath, seenIds, maxTokens));
   } else {
     // No headings at all — handle as special case
     const fullText = bodyNodes.map(node => mdastToString(node)).join('\n\n').trim();

@@ -17,7 +17,9 @@ export function applyDecay(results: SearchResult[], decayRate: number): SearchRe
     .sort((a, b) => b.score - a.score);
 }
 const RRF_OVERFETCH_MULTIPLIER = 3;
-const RESULT_COLUMNS = ['id', 'text', 'source_path', 'heading_path', 'indexed_at'];
+const BASE_COLUMNS = ['id', 'text', 'source_path', 'heading_path', 'indexed_at'];
+const VECTOR_COLUMNS = [...BASE_COLUMNS, '_distance'];
+const FTS_COLUMNS = [...BASE_COLUMNS, '_score'];
 
 function buildWherePredicate(options: SearchOptions): string | undefined {
   const conditions: string[] = [];
@@ -57,7 +59,7 @@ export async function search(
   const predicate = buildWherePredicate(options);
 
   if (mode === 'fts') {
-    const q = table.search(query, 'fts').select(RESULT_COLUMNS).limit(topK);
+    const q = table.search(query, 'fts').select(FTS_COLUMNS).limit(topK);
     if (predicate) q.where(predicate);
     const rows = await q.toArray();
     return applyDecay(rows.map(rowToResult), stalenessDecayRate);
@@ -66,7 +68,7 @@ export async function search(
   const queryVector = (await embedder.embed([query]))[0];
 
   if (mode === 'vector') {
-    const q = table.search(queryVector as lancedb.IntoVector).select(RESULT_COLUMNS).limit(topK);
+    const q = table.search(queryVector as lancedb.IntoVector).select(VECTOR_COLUMNS).limit(topK);
     if (predicate) q.where(predicate);
     const rows = await q.toArray();
     return applyDecay(rows.map(rowToResult), stalenessDecayRate);
@@ -77,11 +79,11 @@ export async function search(
   const [vecArrow, ftsArrow] = await Promise.all([
     table
       .search(queryVector as lancedb.IntoVector)
-      .select(RESULT_COLUMNS)
+      .select(VECTOR_COLUMNS)
       .withRowId()
       .limit(fetchK)
       .toArrow(),
-    table.search(query, 'fts').select(RESULT_COLUMNS).withRowId().limit(fetchK).toArrow(),
+    table.search(query, 'fts').select(FTS_COLUMNS).withRowId().limit(fetchK).toArrow(),
   ]);
 
   const { RRFReranker } = lancedb.rerankers;

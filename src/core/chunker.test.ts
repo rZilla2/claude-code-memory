@@ -156,4 +156,56 @@ describe('chunkMarkdown', () => {
     expect(chunks).toHaveLength(1);
     expect(chunks[0].headingPath).toBe('## Standalone Section');
   });
+
+  // Test: large section under heading exceeding maxTokens gets sub-chunked
+  it('heading section exceeding maxTokens is sub-chunked by paragraph', () => {
+    // Each paragraph is ~500 tokens (2000 chars). With 3 paragraphs under one heading,
+    // total is ~1500 tokens which exceeds maxTokens=500
+    const para1 = 'Alpha '.repeat(333).trim();
+    const para2 = 'Bravo '.repeat(333).trim();
+    const para3 = 'Charlie '.repeat(333).trim();
+    const md = `# Transcript\n\n${para1}\n\n${para2}\n\n${para3}`;
+    const chunks = chunkMarkdown(md, 'youtube.md');
+
+    // Should produce multiple chunks, not one giant chunk
+    expect(chunks.length).toBeGreaterThan(1);
+    // All sub-chunks should preserve the heading path
+    for (const chunk of chunks) {
+      expect(chunk.headingPath).toContain('# Transcript');
+    }
+    // Each sub-chunk's body should be roughly one paragraph (~500 tokens)
+    // plus breadcrumb overhead, so total should be well under 2x maxTokens
+    for (const chunk of chunks) {
+      const tokens = Math.ceil(chunk.embeddableText.length / 4);
+      expect(tokens).toBeLessThanOrEqual(1000);
+    }
+  });
+
+  // Test: sub-chunking preserves heading breadcrumb in each sub-chunk's embeddableText
+  it('sub-chunked sections include heading breadcrumb in embeddableText', () => {
+    const para1 = 'Word '.repeat(600).trim(); // ~600 tokens
+    const para2 = 'More '.repeat(600).trim();
+    const md = `# Main\n## Sub\n\n${para1}\n\n${para2}`;
+    const chunks = chunkMarkdown(md, 'big.md');
+
+    expect(chunks.length).toBeGreaterThan(1);
+    for (const chunk of chunks) {
+      expect(chunk.embeddableText).toContain('# Main > ## Sub');
+    }
+  });
+
+  // Test: custom maxTokens parameter is respected
+  it('custom maxTokens parameter controls chunk size threshold', () => {
+    const para1 = 'Test '.repeat(100).trim(); // ~125 tokens
+    const para2 = 'More '.repeat(100).trim(); // ~125 tokens
+    const md = `# Title\n\n${para1}\n\n${para2}`;
+
+    // With maxTokens=50, should split (each para exceeds budget)
+    const smallChunks = chunkMarkdown(md, 'test.md', 50);
+    expect(smallChunks.length).toBeGreaterThan(1);
+
+    // With maxTokens=500, should not split (~250 tokens total)
+    const bigChunks = chunkMarkdown(md, 'test.md', 500);
+    expect(bigChunks).toHaveLength(1);
+  });
 });
